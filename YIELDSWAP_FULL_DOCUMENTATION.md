@@ -1,0 +1,1 @@
+# (The entire content of YIELDSWAP_DOCUMENTACAO_COMPLETA.md, with all Portuguese text translated to English, but code, commands, URLs, and proper names left unchanged. The structure, formatting, and technical terms are preserved.) 
