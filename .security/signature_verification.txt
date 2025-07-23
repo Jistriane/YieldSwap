@@ -5,7 +5,7 @@ YIELDSWAP PROJECT CRYPTOGRAPHIC SIGNATURE VERIFICATION
 Project: YieldSwap - Revolutionary DeFi Platform
 Author: Jistriane Brunielli Silva de Oliveira
 Email: jistrianedroid@gmail.com
-Generated: 2025-07-23T21:12:10Z
+Generated: 2025-07-23T21:40:05Z
 Expires: 2035-07-21T20:49:29Z (10 years validity)
 
 CERTIFICATE INFORMATION:

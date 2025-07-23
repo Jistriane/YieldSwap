@@ -9,7 +9,7 @@
     "repository": "https://github.com/yieldswap/yieldswap"
   },
   "signature": {
-    "generated_at": "2025-07-23T21:12:10Z",
+    "generated_at": "2025-07-23T21:40:05Z",
     "expires_at": "2035-07-21T20:49:29Z",
     "algorithm": "RSA-4096 + SHA-256",
     "certificate": "yieldswap_certificate.crt",
