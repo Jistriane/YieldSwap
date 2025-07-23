@@ -1238,7 +1238,6 @@ SOFTWARE.
 - **10+ anos** em desenvolvimento de software
 - **5+ anos** em arquitetura de sistemas
 - **3+ anos** em blockchain e DeFi
-- **50+ projetos** entregues com sucesso
 
 **🏆 Conquistas Recentes:**
 - ✅ **YieldSwap Backend** deployado com sucesso na Vercel
