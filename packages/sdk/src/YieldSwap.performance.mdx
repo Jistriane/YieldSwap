@@ -1,0 +1,281 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/Performance" />
+
+# YieldSwap SDK Performance
+
+## Otimizações
+
+### Cache
+
+O SDK implementa um sistema de cache eficiente:
+
+```typescript
+const cache = new Map<string, CacheEntry>();
+
+interface CacheEntry {
+  value: unknown;
+  timestamp: number;
+  ttl: number;
+}
+
+function get<T>(key: string): T | null {
+  const entry = cache.get(key);
+  if (!entry) return null;
+
+  if (Date.now() - entry.timestamp > entry.ttl) {
+    cache.delete(key);
+    return null;
+  }
+
+  return entry.value as T;
+}
+
+function set(key: string, value: unknown, ttl = 20000): void {
+  cache.set(key, {
+    value,
+    timestamp: Date.now(),
+    ttl,
+  });
+}
+```
+
+### Memoização
+
+Funções puras são memoizadas para evitar recálculos:
+
+```typescript
+const memoizedCalculatePriceImpact = memoize(
+  (amountIn: string, amountOut: string, price: string) => {
+    const expectedAmountOut = new BigNumber(amountIn).multipliedBy(price);
+    const actualAmountOut = new BigNumber(amountOut);
+    return expectedAmountOut
+      .minus(actualAmountOut)
+      .dividedBy(expectedAmountOut)
+      .multipliedBy(100)
+      .toFixed(2);
+  },
+);
+```
+
+### Batch Requests
+
+Múltiplas requisições são agrupadas quando possível:
+
+```typescript
+async function batchGetVaultInfo(assets: string[]): Promise<VaultInfo[]> {
+  const uniqueAssets = [...new Set(assets)];
+  const query = `
+    query {
+      vaults(where: { asset_in: ${JSON.stringify(uniqueAssets)} }) {
+        id
+        asset
+        apy
+      }
+    }
+  `;
+
+  const response = await this.client.post('/graphql', { query });
+  return response.data.data.vaults;
+}
+```
+
+### WebSocket Otimizado
+
+O WebSocket é otimizado para minimizar o tráfego:
+
+```typescript
+class OptimizedWebSocket {
+  private pendingUpdates = new Map<string, ApyUpdate>();
+  private updateInterval = 100; // 100ms
+
+  constructor() {
+    setInterval(() => this.flushUpdates(), this.updateInterval);
+  }
+
+  private flushUpdates(): void {
+    if (this.pendingUpdates.size === 0) return;
+
+    const updates = Array.from(this.pendingUpdates.values());
+    this.pendingUpdates.clear();
+    this.emit('updates', updates);
+  }
+
+  private queueUpdate(update: ApyUpdate): void {
+    this.pendingUpdates.set(update.vault, update);
+  }
+}
+```
+
+### Lazy Loading
+
+Componentes e recursos são carregados sob demanda:
+
+```typescript
+const LazyComponent = React.lazy(() => import('./Component'));
+
+function App() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+
+## Métricas
+
+### Tempo de Resposta
+
+- API: < 100ms
+- WebSocket: < 50ms
+- Cache Hit: < 1ms
+- Simulação: < 200ms
+
+### Uso de Memória
+
+- SDK: < 5MB
+- Cache: < 10MB
+- WebSocket: < 2MB
+
+### CPU
+
+- Cálculos: < 1ms
+- Validações: < 0.5ms
+- Transformações: < 1ms
+
+### Rede
+
+- Payload máximo: 10KB
+- Compressão: gzip
+- Conexões máximas: 1000/min
+
+## Monitoramento
+
+### Métricas Coletadas
+
+```typescript
+interface PerformanceMetrics {
+  apiLatency: number;
+  websocketLatency: number;
+  cacheHitRate: number;
+  memoryUsage: number;
+  cpuUsage: number;
+  networkTraffic: number;
+}
+
+function collectMetrics(): PerformanceMetrics {
+  return {
+    apiLatency: measureApiLatency(),
+    websocketLatency: measureWebSocketLatency(),
+    cacheHitRate: calculateCacheHitRate(),
+    memoryUsage: process.memoryUsage().heapUsed,
+    cpuUsage: process.cpuUsage().user,
+    networkTraffic: measureNetworkTraffic(),
+  };
+}
+```
+
+### Alertas
+
+```typescript
+function checkPerformance(metrics: PerformanceMetrics): void {
+  if (metrics.apiLatency > 100) {
+    alert('API latency too high');
+  }
+
+  if (metrics.memoryUsage > 100 * 1024 * 1024) {
+    alert('Memory usage too high');
+  }
+
+  if (metrics.cacheHitRate < 0.8) {
+    alert('Cache hit rate too low');
+  }
+}
+```
+
+## Benchmarks
+
+### API
+
+```typescript
+async function benchmarkApi(): Promise<void> {
+  console.time('api');
+  
+  for (let i = 0; i < 100; i++) {
+    await api.getVaultApy('XLM');
+  }
+
+  console.timeEnd('api');
+}
+```
+
+### WebSocket
+
+```typescript
+function benchmarkWebSocket(): Promise<void> {
+  return new Promise((resolve) => {
+    console.time('websocket');
+    
+    let count = 0;
+    const ws = new WebSocket('ws://localhost:3001');
+
+    ws.on('message', () => {
+      count++;
+      if (count === 100) {
+        console.timeEnd('websocket');
+        resolve();
+      }
+    });
+  });
+}
+```
+
+### Cache
+
+```typescript
+function benchmarkCache(): void {
+  console.time('cache');
+
+  for (let i = 0; i < 10000; i++) {
+    cache.set(`key${i}`, { value: i });
+    cache.get(`key${i}`);
+  }
+
+  console.timeEnd('cache');
+}
+```
+
+## Recomendações
+
+### Para Desenvolvedores
+
+1. Usar cache quando possível
+2. Implementar memoização
+3. Otimizar requisições
+4. Monitorar performance
+5. Seguir boas práticas
+
+### Para Usuários
+
+1. Usar conexão estável
+2. Limitar requisições
+3. Implementar retry
+4. Monitorar uso
+5. Reportar problemas
+
+## Roadmap
+
+### Curto Prazo
+
+- [ ] Implementar cache distribuído
+- [ ] Otimizar batch requests
+- [ ] Melhorar compressão
+- [ ] Reduzir latência
+
+### Longo Prazo
+
+- [ ] Implementar sharding
+- [ ] Otimizar indexação
+- [ ] Melhorar escalabilidade
+- [ ] Reduzir custos 

@@ -1,0 +1,158 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { YieldSwap } from './YieldSwap';
+
+<Meta title="SDK/YieldSwap" component={YieldSwap} />
+
+# YieldSwap SDK
+
+O YieldSwap SDK é uma biblioteca que facilita a integração com o protocolo YieldSwap.
+
+## Instalação
+
+```bash
+yarn add @yieldswap/sdk
+```
+
+## Uso Básico
+
+```typescript
+import { YieldSwap } from '@yieldswap/sdk';
+
+const sdk = new YieldSwap({
+  api: {
+    baseURL: 'http://localhost:3001',
+  },
+  websocket: {
+    url: 'ws://localhost:3001',
+  },
+});
+
+// Conectar ao WebSocket
+sdk.connect();
+
+// Obter rota de swap
+const route = await sdk.getApi().getSwapRoute('USDC', 'XLM', '100');
+
+// Obter APY de um vault
+const vault = await sdk.getApi().getVaultApy('XLM');
+
+// Desconectar do WebSocket
+sdk.disconnect();
+```
+
+## Configuração
+
+O SDK aceita as seguintes opções de configuração:
+
+```typescript
+interface SdkConfig {
+  api: {
+    baseURL: string;
+    timeout?: number;
+    headers?: Record<string, string>;
+  };
+  websocket: {
+    url: string;
+    reconnection?: boolean;
+    reconnectionDelay?: number;
+    reconnectionDelayMax?: number;
+  };
+  sentry?: {
+    dsn: string;
+    environment?: string;
+  };
+}
+```
+
+## Exemplo
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const sdk = new YieldSwap({
+        api: {
+          baseURL: 'http://localhost:3001',
+        },
+        websocket: {
+          url: 'ws://localhost:3001',
+        },
+      });
+
+      React.useEffect(() => {
+        sdk.connect();
+        return () => sdk.disconnect();
+      }, []);
+
+      return (
+        <div>
+          <h1>YieldSwap SDK</h1>
+          <p>Open the console to see the SDK in action.</p>
+          <pre>
+            {`
+const sdk = new YieldSwap({
+  api: {
+    baseURL: 'http://localhost:3001',
+  },
+  websocket: {
+    url: 'ws://localhost:3001',
+  },
+});
+
+sdk.connect();
+            `}
+          </pre>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## API
+
+### YieldSwap
+
+#### Construtor
+
+```typescript
+new YieldSwap(config: SdkConfig)
+```
+
+#### Métodos
+
+- `connect(): void` - Conecta ao WebSocket
+- `disconnect(): void` - Desconecta do WebSocket
+- `getApi(): Api` - Retorna a instância da API
+- `getWebSocket(): WebSocket` - Retorna a instância do WebSocket
+- `getWallet(): Wallet` - Retorna a instância da carteira
+
+### Api
+
+#### Métodos
+
+- `getSwapRoute(tokenIn: string, tokenOut: string, amountIn: string): Promise<SwapRoute>`
+- `getVaultApy(asset: string): Promise<VaultInfo>`
+- `getBestVault(asset: string): Promise<VaultInfo>`
+- `simulateSwapAndDeposit(tokenIn: string, tokenOut: string, amountIn: string, userAddress: string): Promise<SimulationResult>`
+
+### WebSocket
+
+#### Métodos
+
+- `connect(): void`
+- `disconnect(): void`
+- `subscribeToVault(vaultAddress: string, callback: (data: ApyUpdate) => void): void`
+- `unsubscribeFromVault(vaultAddress: string, callback: (data: ApyUpdate) => void): void`
+
+### Wallet
+
+#### Métodos
+
+- `connect(): Promise<WalletInfo>`
+- `disconnect(): Promise<void>`
+- `getBalance(asset: string): Promise<string>`
+- `signTransaction(xdr: string): Promise<string>`
+- `submitTransaction(signedXdr: string): Promise<string>`
+- `isConnected(): boolean`
+- `getAddress(): string`
+- `getPublicKey(): string`
+- `getNetwork(): string` 

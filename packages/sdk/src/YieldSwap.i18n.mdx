@@ -1,0 +1,267 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/i18n" />
+
+# YieldSwap SDK Internacionalização
+
+## Configuração
+
+O SDK utiliza o next-i18next para internacionalização:
+
+```typescript
+// next-i18next.config.js
+module.exports = {
+  i18n: {
+    defaultLocale: 'pt',
+    locales: ['pt', 'en', 'es'],
+    localeDetection: true,
+  },
+  localePath: './public/locales',
+  reloadOnPrerender: process.env.NODE_ENV === 'development',
+};
+```
+
+## Estrutura de Arquivos
+
+```
+public/
+  locales/
+    pt/
+      common.json
+      errors.json
+      swap.json
+    en/
+      common.json
+      errors.json
+      swap.json
+    es/
+      common.json
+      errors.json
+      swap.json
+```
+
+## Traduções
+
+### Português (pt)
+
+```json
+{
+  "swap": {
+    "title": "Trocar & Ganhar",
+    "from": "De",
+    "to": "Para",
+    "amount": "Quantidade",
+    "rate": "Taxa",
+    "slippage": "Slippage",
+    "apy": "APY",
+    "confirm": "Confirmar",
+    "success": "Transação concluída! Você agora tem {{amount}} {{token}}-Shares rendendo {{apy}}% a.a."
+  },
+  "wallet": {
+    "connect": "Conectar Carteira",
+    "disconnect": "Desconectar",
+    "balance": "Saldo: {{amount}} {{token}}"
+  },
+  "error": {
+    "insufficientBalance": "Saldo insuficiente",
+    "slippageExceeded": "Slippage excedido",
+    "networkError": "Erro de rede. Tente novamente.",
+    "unknownError": "Erro desconhecido. Tente novamente."
+  }
+}
+```
+
+### English (en)
+
+```json
+{
+  "swap": {
+    "title": "Swap & Earn",
+    "from": "From",
+    "to": "To",
+    "amount": "Amount",
+    "rate": "Rate",
+    "slippage": "Slippage",
+    "apy": "APY",
+    "confirm": "Confirm",
+    "success": "Transaction completed! You now have {{amount}} {{token}}-Shares earning {{apy}}% APY"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "balance": "Balance: {{amount}} {{token}}"
+  },
+  "error": {
+    "insufficientBalance": "Insufficient balance",
+    "slippageExceeded": "Slippage exceeded",
+    "networkError": "Network error. Please try again.",
+    "unknownError": "Unknown error. Please try again."
+  }
+}
+```
+
+### Español (es)
+
+```json
+{
+  "swap": {
+    "title": "Intercambiar & Ganar",
+    "from": "De",
+    "to": "A",
+    "amount": "Cantidad",
+    "rate": "Tasa",
+    "slippage": "Deslizamiento",
+    "apy": "APY",
+    "confirm": "Confirmar",
+    "success": "¡Transacción completada! Ahora tienes {{amount}} {{token}}-Shares ganando {{apy}}% APY"
+  },
+  "wallet": {
+    "connect": "Conectar Billetera",
+    "disconnect": "Desconectar",
+    "balance": "Saldo: {{amount}} {{token}}"
+  },
+  "error": {
+    "insufficientBalance": "Saldo insuficiente",
+    "slippageExceeded": "Deslizamiento excedido",
+    "networkError": "Error de red. Inténtalo de nuevo.",
+    "unknownError": "Error desconocido. Inténtalo de nuevo."
+  }
+}
+```
+
+## Uso
+
+### Hooks
+
+```typescript
+import { useTranslation } from 'next-i18next';
+
+function SwapForm() {
+  const { t } = useTranslation('common');
+
+  return (
+    <form>
+      <h2>{t('swap.title')}</h2>
+      <label>{t('swap.from')}</label>
+      <input placeholder={t('swap.amount')} />
+      <button>{t('swap.confirm')}</button>
+    </form>
+  );
+}
+```
+
+### Componentes
+
+```typescript
+import { Trans } from 'next-i18next';
+
+function SwapSuccess({ amount, token, apy }) {
+  return (
+    <Trans
+      i18nKey="swap.success"
+      values={{ amount, token, apy }}
+      components={{ bold: <strong /> }}
+    />
+  );
+}
+```
+
+### Erros
+
+```typescript
+function handleError(error: Error) {
+  const { t } = useTranslation('common');
+
+  switch (error.code) {
+    case 'INSUFFICIENT_BALANCE':
+      return t('error.insufficientBalance');
+    case 'SLIPPAGE_EXCEEDED':
+      return t('error.slippageExceeded');
+    case 'NETWORK_ERROR':
+      return t('error.networkError');
+    default:
+      return t('error.unknownError');
+  }
+}
+```
+
+## Detecção de Idioma
+
+```typescript
+import { useRouter } from 'next/router';
+
+function LanguageSelector() {
+  const router = useRouter();
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const locale = e.target.value;
+    router.push(router.pathname, router.asPath, { locale });
+  };
+
+  return (
+    <select
+      value={router.locale}
+      onChange={handleLanguageChange}
+      className="bg-gray-700 text-white rounded-md px-3 py-2"
+    >
+      <option value="pt">🇧🇷 Português</option>
+      <option value="en">🇺🇸 English</option>
+      <option value="es">🇪🇸 Español</option>
+    </select>
+  );
+}
+```
+
+## Integração com Crowdin
+
+```typescript
+// crowdin.yml
+project_id: ${CROWDIN_PROJECT_ID}
+api_token: ${CROWDIN_API_TOKEN}
+base_path: .
+base_url: https://api.crowdin.com
+
+preserve_hierarchy: true
+
+files:
+  - source: /apps/web/public/locales/en/**/*.json
+    translation: /apps/web/public/locales/%two_letters_code%/**/%original_file_name%
+    languages_mapping:
+      two_letters_code:
+        pt-BR: pt
+        es-ES: es
+```
+
+## Recomendações
+
+### Para Desenvolvedores
+
+1. Usar chaves de tradução consistentes
+2. Manter traduções organizadas
+3. Documentar contexto
+4. Testar todos os idiomas
+5. Atualizar traduções regularmente
+
+### Para Tradutores
+
+1. Manter consistência
+2. Respeitar contexto
+3. Testar em produção
+4. Reportar problemas
+5. Sugerir melhorias
+
+## Roadmap
+
+### Curto Prazo
+
+- [ ] Adicionar mais idiomas
+- [ ] Melhorar documentação
+- [ ] Otimizar carregamento
+- [ ] Implementar testes
+
+### Longo Prazo
+
+- [ ] Suporte RTL
+- [ ] Tradução automática
+- [ ] Melhorar workflow
+- [ ] Expandir cobertura 

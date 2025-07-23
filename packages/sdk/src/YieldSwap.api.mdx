@@ -1,0 +1,365 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/API" />
+
+# YieldSwap SDK API
+
+## YieldSwap
+
+### Construtor
+
+```typescript
+new YieldSwap(config: SdkConfig)
+```
+
+#### SdkConfig
+
+```typescript
+interface SdkConfig {
+  api: {
+    baseURL: string;
+    timeout?: number;
+    headers?: Record<string, string>;
+  };
+  websocket: {
+    url: string;
+    reconnection?: boolean;
+    reconnectionDelay?: number;
+    reconnectionDelayMax?: number;
+  };
+  sentry?: {
+    dsn: string;
+    environment?: string;
+  };
+}
+```
+
+### Métodos
+
+#### connect
+
+```typescript
+connect(): void
+```
+
+Conecta ao WebSocket para receber atualizações em tempo real.
+
+#### disconnect
+
+```typescript
+disconnect(): void
+```
+
+Desconecta do WebSocket.
+
+#### getApi
+
+```typescript
+getApi(): Api
+```
+
+Retorna a instância da API.
+
+#### getWebSocket
+
+```typescript
+getWebSocket(): WebSocket
+```
+
+Retorna a instância do WebSocket.
+
+#### getWallet
+
+```typescript
+getWallet(): Wallet
+```
+
+Retorna a instância da carteira.
+
+## Api
+
+### Métodos
+
+#### getSwapRoute
+
+```typescript
+getSwapRoute(
+  tokenIn: string,
+  tokenOut: string,
+  amountIn: string,
+): Promise<SwapRoute>
+```
+
+Obtém a melhor rota para um swap.
+
+#### getVaultApy
+
+```typescript
+getVaultApy(asset: string): Promise<VaultInfo>
+```
+
+Obtém o APY de um vault específico.
+
+#### getBestVault
+
+```typescript
+getBestVault(asset: string): Promise<VaultInfo>
+```
+
+Obtém o vault com melhor APY para um ativo.
+
+#### simulateSwapAndDeposit
+
+```typescript
+simulateSwapAndDeposit(
+  tokenIn: string,
+  tokenOut: string,
+  amountIn: string,
+  userAddress: string,
+): Promise<SimulationResult>
+```
+
+Simula uma operação de swap e depósito.
+
+## WebSocket
+
+### Métodos
+
+#### connect
+
+```typescript
+connect(): void
+```
+
+Conecta ao servidor WebSocket.
+
+#### disconnect
+
+```typescript
+disconnect(): void
+```
+
+Desconecta do servidor WebSocket.
+
+#### subscribeToVault
+
+```typescript
+subscribeToVault(
+  vaultAddress: string,
+  callback: (data: ApyUpdate) => void,
+): void
+```
+
+Inscreve-se para receber atualizações de APY de um vault.
+
+#### unsubscribeFromVault
+
+```typescript
+unsubscribeFromVault(
+  vaultAddress: string,
+  callback: (data: ApyUpdate) => void,
+): void
+```
+
+Cancela a inscrição para atualizações de APY de um vault.
+
+## Wallet
+
+### Métodos
+
+#### connect
+
+```typescript
+connect(): Promise<WalletInfo>
+```
+
+Conecta à carteira Freighter.
+
+#### disconnect
+
+```typescript
+disconnect(): Promise<void>
+```
+
+Desconecta da carteira.
+
+#### getBalance
+
+```typescript
+getBalance(asset: string): Promise<string>
+```
+
+Obtém o saldo de um ativo.
+
+#### signTransaction
+
+```typescript
+signTransaction(xdr: string): Promise<string>
+```
+
+Assina uma transação.
+
+#### submitTransaction
+
+```typescript
+submitTransaction(signedXdr: string): Promise<string>
+```
+
+Envia uma transação assinada.
+
+#### isConnected
+
+```typescript
+isConnected(): boolean
+```
+
+Verifica se a carteira está conectada.
+
+#### getAddress
+
+```typescript
+getAddress(): string
+```
+
+Obtém o endereço da carteira.
+
+#### getPublicKey
+
+```typescript
+getPublicKey(): string
+```
+
+Obtém a chave pública da carteira.
+
+#### getNetwork
+
+```typescript
+getNetwork(): string
+```
+
+Obtém a rede atual da carteira.
+
+## Tipos
+
+### SwapRoute
+
+```typescript
+interface SwapRoute {
+  path: string[];
+  amountOut: string;
+  priceImpact: string;
+}
+```
+
+### VaultInfo
+
+```typescript
+interface VaultInfo {
+  address: string;
+  apy: number;
+}
+```
+
+### ApyUpdate
+
+```typescript
+interface ApyUpdate {
+  vault: string;
+  apy: number;
+  timestamp: string;
+}
+```
+
+### SimulationResult
+
+```typescript
+interface SimulationResult {
+  route: SwapRoute;
+  vault: VaultInfo;
+  gasEstimate: string;
+  success: boolean;
+}
+```
+
+### WalletInfo
+
+```typescript
+interface WalletInfo {
+  address: string;
+  publicKey: string;
+  network: string;
+  isConnected: boolean;
+}
+```
+
+## Constantes
+
+### NETWORKS
+
+```typescript
+const NETWORKS = {
+  MAINNET: 'mainnet',
+  TESTNET: 'testnet',
+} as const;
+```
+
+### ASSETS
+
+```typescript
+const ASSETS = {
+  XLM: 'native',
+  USDC: 'USDC',
+  EURC: 'EURC',
+} as const;
+```
+
+### Configurações
+
+```typescript
+const DEFAULT_SLIPPAGE = 0.5; // 0.5%
+const MAX_SLIPPAGE = 5; // 5%
+const MIN_AMOUNT = '0.0000001';
+const DEFAULT_TIMEOUT = 10000; // 10s
+const DEFAULT_RETRY_DELAY = 1000; // 1s
+const DEFAULT_MAX_RETRIES = 3;
+```
+
+## Erros
+
+### YieldSwapError
+
+```typescript
+class YieldSwapError extends Error {
+  constructor(
+    code: keyof typeof ERROR_CODES,
+    message: string,
+    details?: unknown,
+  );
+}
+```
+
+### Tipos de Erro
+
+- `WalletNotConnectedError`
+- `InsufficientBalanceError`
+- `InvalidAmountError`
+- `InvalidAddressError`
+- `InvalidSlippageError`
+- `TransactionFailedError`
+- `UserRejectedError`
+- `NetworkError`
+
+### Códigos de Erro
+
+```typescript
+const ERROR_CODES = {
+  WALLET_NOT_CONNECTED: 'WALLET_NOT_CONNECTED',
+  INSUFFICIENT_BALANCE: 'INSUFFICIENT_BALANCE',
+  INVALID_AMOUNT: 'INVALID_AMOUNT',
+  INVALID_ADDRESS: 'INVALID_ADDRESS',
+  INVALID_SLIPPAGE: 'INVALID_SLIPPAGE',
+  TRANSACTION_FAILED: 'TRANSACTION_FAILED',
+  USER_REJECTED: 'USER_REJECTED',
+  NETWORK_ERROR: 'NETWORK_ERROR',
+} as const;
+``` 

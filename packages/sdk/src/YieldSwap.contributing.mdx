@@ -1,0 +1,310 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/Contributing" />
+
+# Contribuindo para o YieldSwap SDK
+
+## Começando
+
+### Pré-requisitos
+
+- Node.js >=18
+- Yarn
+- Rust + Cargo
+- Docker (opcional)
+
+### Setup
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/yieldswap/yieldswap.git
+cd yieldswap
+```
+
+2. Instale as dependências:
+```bash
+yarn install
+```
+
+3. Configure as variáveis de ambiente:
+```bash
+cp .env.example .env-dev
+```
+
+4. Inicie o ambiente de desenvolvimento:
+```bash
+yarn dev
+```
+
+## Estrutura do Projeto
+
+```
+├── apps
+│   ├── web          # Frontend Next.js
+│   └── api          # Backend NestJS
+├── packages
+│   ├── contracts    # Smart Contracts Soroban/Rust
+│   ├── sdk          # SDK TypeScript
+│   └── ui           # Componentes compartilhados
+```
+
+## Fluxo de Trabalho
+
+1. Crie uma branch para sua feature:
+```bash
+git checkout -b feature/nome-da-feature
+```
+
+2. Faça suas alterações seguindo as convenções:
+- Commits semânticos
+- Testes unitários
+- Documentação
+- Linting
+
+3. Execute os testes:
+```bash
+yarn test
+```
+
+4. Faça o commit das alterações:
+```bash
+git add .
+git commit -m "feat: adiciona nova funcionalidade"
+```
+
+5. Envie para o GitHub:
+```bash
+git push origin feature/nome-da-feature
+```
+
+6. Abra um Pull Request
+
+## Convenções
+
+### Commits
+
+Seguimos o [Conventional Commits](https://www.conventionalcommits.org/):
+
+- feat: Nova funcionalidade
+- fix: Correção de bug
+- docs: Documentação
+- style: Formatação
+- refactor: Refatoração
+- test: Testes
+- chore: Manutenção
+
+### Código
+
+- TypeScript strict mode
+- ESLint + Prettier
+- Jest para testes
+- Documentação JSDoc
+
+### Pull Requests
+
+- Título descritivo
+- Descrição detalhada
+- Referência a issues
+- Screenshots (se UI)
+- Checklist de review
+
+## Desenvolvimento
+
+### Frontend
+
+```typescript
+// Componente
+function MyComponent({ prop }: Props) {
+  // Props tipadas
+  // Hooks no topo
+  // Funções auxiliares
+  // Retorno JSX
+}
+
+// Teste
+describe('MyComponent', () => {
+  it('should render correctly', () => {
+    // Arrange
+    // Act
+    // Assert
+  });
+});
+```
+
+### Backend
+
+```typescript
+// Serviço
+@Injectable()
+class MyService {
+  // Dependências injetadas
+  // Métodos públicos
+  // Métodos privados
+}
+
+// Teste
+describe('MyService', () => {
+  it('should do something', async () => {
+    // Arrange
+    // Act
+    // Assert
+  });
+});
+```
+
+### Smart Contract
+
+```rust
+#[contract]
+pub struct MyContract {
+    // Estado
+}
+
+#[contractimpl]
+impl MyContract {
+    // Métodos públicos
+    // Métodos privados
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_something() {
+        // Arrange
+        // Act
+        // Assert
+    }
+}
+```
+
+## Testes
+
+### Unitários
+
+```typescript
+describe('Unit', () => {
+  it('should test one thing', () => {
+    expect(true).toBe(true);
+  });
+});
+```
+
+### Integração
+
+```typescript
+describe('Integration', () => {
+  it('should test system interaction', async () => {
+    // Setup
+    // Execute
+    // Verify
+    // Cleanup
+  });
+});
+```
+
+### E2E
+
+```typescript
+describe('E2E', () => {
+  it('should test full flow', async () => {
+    // Setup environment
+    // Execute user actions
+    // Verify results
+    // Cleanup
+  });
+});
+```
+
+## Documentação
+
+### Código
+
+```typescript
+/**
+ * Faz algo importante
+ * @param param - Descrição do parâmetro
+ * @returns Descrição do retorno
+ * @throws Descrição do erro
+ * @example
+ * ```typescript
+ * const result = doSomething('param');
+ * ```
+ */
+function doSomething(param: string): string {
+  // ...
+}
+```
+
+### API
+
+```typescript
+/**
+ * @api {get} /api/v1/resource Obter recurso
+ * @apiName GetResource
+ * @apiGroup Resource
+ * @apiVersion 1.0.0
+ * @apiParam {String} id ID do recurso
+ * @apiSuccess {Object} resource Recurso
+ * @apiError {Object} error Erro
+ */
+```
+
+### Storybook
+
+```typescript
+import { Story } from '@storybook/react';
+
+export default {
+  title: 'Component',
+  component: Component,
+};
+
+const Template: Story = (args) => <Component {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  // Props
+};
+```
+
+## Review
+
+### Checklist
+
+- [ ] Testes passando
+- [ ] Linting ok
+- [ ] Documentação atualizada
+- [ ] Sem warnings
+- [ ] Performance ok
+- [ ] Segurança verificada
+- [ ] i18n completo
+- [ ] Acessibilidade ok
+
+### Processo
+
+1. Code review
+2. QA review
+3. Security review
+4. UX review
+5. Merge
+6. Deploy
+
+## Deploy
+
+### Staging
+
+```bash
+yarn deploy:staging
+```
+
+### Produção
+
+```bash
+yarn deploy:prod
+```
+
+## Suporte
+
+- Discord: discord.gg/yieldswap
+- Email: dev@yieldswap.com
+- Docs: docs.yieldswap.com 

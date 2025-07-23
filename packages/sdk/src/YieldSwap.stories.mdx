@@ -1,0 +1,248 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { YieldSwap } from './YieldSwap';
+
+<Meta title="SDK/YieldSwap/Examples" component={YieldSwap} />
+
+# YieldSwap SDK Examples
+
+## Swap e Yield Farming
+
+<Canvas>
+  <Story name="SwapAndYield">
+    {() => {
+      const sdk = new YieldSwap({
+        api: {
+          baseURL: 'http://localhost:3001',
+        },
+        websocket: {
+          url: 'ws://localhost:3001',
+        },
+      });
+
+      const [route, setRoute] = React.useState(null);
+      const [vault, setVault] = React.useState(null);
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+
+      const handleSwap = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          // Obter rota de swap
+          const swapRoute = await sdk.getApi().getSwapRoute('USDC', 'XLM', '100');
+          setRoute(swapRoute);
+
+          // Obter melhor vault
+          const bestVault = await sdk.getApi().getBestVault('XLM');
+          setVault(bestVault);
+
+          // Simular swap e depósito
+          const simulation = await sdk.getApi().simulateSwapAndDeposit(
+            'USDC',
+            'XLM',
+            '100',
+            'G...',
+          );
+
+          console.log('Simulation:', simulation);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      React.useEffect(() => {
+        sdk.connect();
+        return () => sdk.disconnect();
+      }, []);
+
+      return (
+        <div>
+          <h2>Swap USDC → XLM</h2>
+          <button
+            onClick={handleSwap}
+            disabled={loading}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: loading ? '#ccc' : '#2563eb',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {loading ? 'Loading...' : 'Swap & Earn'}
+          </button>
+
+          {error && (
+            <div style={{ color: 'red', marginTop: '8px' }}>
+              Error: {error}
+            </div>
+          )}
+
+          {route && (
+            <div style={{ marginTop: '16px' }}>
+              <h3>Swap Route</h3>
+              <pre>{JSON.stringify(route, null, 2)}</pre>
+            </div>
+          )}
+
+          {vault && (
+            <div style={{ marginTop: '16px' }}>
+              <h3>Best Vault</h3>
+              <pre>{JSON.stringify(vault, null, 2)}</pre>
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Monitoramento de APY
+
+<Canvas>
+  <Story name="ApyMonitoring">
+    {() => {
+      const sdk = new YieldSwap({
+        api: {
+          baseURL: 'http://localhost:3001',
+        },
+        websocket: {
+          url: 'ws://localhost:3001',
+        },
+      });
+
+      const [apy, setApy] = React.useState(null);
+
+      React.useEffect(() => {
+        sdk.connect();
+
+        const vaultAddress = 'vault_address';
+        const handleApyUpdate = (data) => {
+          setApy(data);
+        };
+
+        sdk.getWebSocket().subscribeToVault(vaultAddress, handleApyUpdate);
+
+        return () => {
+          sdk.getWebSocket().unsubscribeFromVault(vaultAddress, handleApyUpdate);
+          sdk.disconnect();
+        };
+      }, []);
+
+      return (
+        <div>
+          <h2>APY Monitor</h2>
+          {apy ? (
+            <div>
+              <p>Current APY: {apy.apy}%</p>
+              <p>Last update: {new Date(apy.timestamp).toLocaleString()}</p>
+            </div>
+          ) : (
+            <p>Waiting for APY updates...</p>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Integração com Carteira
+
+<Canvas>
+  <Story name="WalletIntegration">
+    {() => {
+      const sdk = new YieldSwap({
+        api: {
+          baseURL: 'http://localhost:3001',
+        },
+        websocket: {
+          url: 'ws://localhost:3001',
+        },
+      });
+
+      const [wallet, setWallet] = React.useState(null);
+      const [balance, setBalance] = React.useState(null);
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+
+      const handleConnect = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const walletInfo = await sdk.getWallet().connect();
+          setWallet(walletInfo);
+
+          const xlmBalance = await sdk.getWallet().getBalance('XLM');
+          setBalance(xlmBalance);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const handleDisconnect = async () => {
+        try {
+          await sdk.getWallet().disconnect();
+          setWallet(null);
+          setBalance(null);
+        } catch (err) {
+          setError(err.message);
+        }
+      };
+
+      return (
+        <div>
+          <h2>Wallet Integration</h2>
+          {!wallet ? (
+            <button
+              onClick={handleConnect}
+              disabled={loading}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: loading ? '#ccc' : '#2563eb',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {loading ? 'Connecting...' : 'Connect Wallet'}
+            </button>
+          ) : (
+            <div>
+              <p>Address: {wallet.address}</p>
+              <p>Network: {wallet.network}</p>
+              {balance && <p>XLM Balance: {balance}</p>}
+              <button
+                onClick={handleDisconnect}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  marginTop: '8px',
+                }}
+              >
+                Disconnect
+              </button>
+            </div>
+          )}
+
+          {error && (
+            <div style={{ color: 'red', marginTop: '8px' }}>
+              Error: {error}
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas> 

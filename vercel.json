@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "apps/web/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "apps/web/$1"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+    "NEXT_PUBLIC_WEBSOCKET_URL": "@next_public_websocket_url",
+    "NEXT_PUBLIC_SOROSWAP_API_URL": "@next_public_soroswap_api_url",
+    "NEXT_PUBLIC_DEFINDEX_SUBGRAPH_URL": "@next_public_defindex_subgraph_url"
+  }
+} 

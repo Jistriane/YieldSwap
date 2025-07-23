@@ -1,0 +1,8 @@
+# Backup do Redis - Executa todos os dias às 3h da manhã
+0 3 * * * root /usr/local/bin/redis-backup.sh >> /var/log/redis-backup.log 2>&1
+
+# Limpeza de logs - Executa todo domingo às 4h da manhã
+0 4 * * 0 root find /var/log -name "redis-backup.log*" -mtime +30 -delete
+
+# Verificação de integridade - Executa a cada 6 horas
+0 */6 * * * root redis-check-rdb /var/backups/redis/dump.rdb >> /var/log/redis-check.log 2>&1 

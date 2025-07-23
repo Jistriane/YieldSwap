@@ -1,0 +1,295 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/Support" />
+
+# Suporte YieldSwap SDK
+
+## Canais de Suporte
+
+### Discord
+
+Nossa comunidade no Discord é o principal canal de suporte:
+
+- Link: https://discord.gg/yieldswap
+- Canais:
+  - #general: Discussões gerais
+  - #dev: Suporte técnico
+  - #bugs: Reporte de bugs
+  - #feature-requests: Sugestões
+  - #announcements: Novidades
+
+### GitHub
+
+Para problemas técnicos e contribuições:
+
+- Issues: https://github.com/yieldswap/sdk/issues
+- Discussions: https://github.com/yieldswap/sdk/discussions
+- Pull Requests: https://github.com/yieldswap/sdk/pulls
+
+### Email
+
+Para contato direto:
+
+- Suporte: support@yieldswap.com
+- Dev: dev@yieldswap.com
+- Security: security@yieldswap.com
+
+## FAQ
+
+### Instalação
+
+**P: Como instalo o SDK?**
+```bash
+yarn add @yieldswap/sdk
+```
+
+**P: Quais são os pré-requisitos?**
+- Node.js >=18
+- Yarn
+- Conexão com internet
+
+**P: Como configuro o ambiente?**
+```bash
+# Clone o repo
+git clone https://github.com/yieldswap/sdk.git
+
+# Instale dependências
+yarn install
+
+# Configure ambiente
+cp .env.example .env-dev
+
+# Inicie desenvolvimento
+yarn dev
+```
+
+### Uso
+
+**P: Como inicio o swap?**
+```typescript
+const sdk = new YieldSwap({
+  api: {
+    baseURL: 'http://localhost:3001',
+  },
+  websocket: {
+    url: 'ws://localhost:3001',
+  },
+});
+
+// Conectar
+sdk.connect();
+
+// Obter rota
+const route = await sdk.getApi().getSwapRoute('USDC', 'XLM', '100');
+
+// Simular
+const simulation = await sdk.getApi().simulateSwapAndDeposit(
+  'USDC',
+  'XLM',
+  '100',
+  'G...',
+);
+```
+
+**P: Como monitoro APY?**
+```typescript
+sdk.getWebSocket().subscribeToVault('vault_address', (data) => {
+  console.log('APY Update:', data);
+});
+```
+
+**P: Como conecto carteira?**
+```typescript
+const wallet = await sdk.getWallet().connect();
+console.log('Connected:', wallet.address);
+```
+
+### Erros Comuns
+
+**P: WALLET_NOT_CONNECTED**
+```typescript
+// Solução
+await sdk.getWallet().connect();
+```
+
+**P: INSUFFICIENT_BALANCE**
+```typescript
+// Solução
+const balance = await sdk.getWallet().getBalance('XLM');
+if (new BigNumber(balance).lt(amount)) {
+  throw new Error('Saldo insuficiente');
+}
+```
+
+**P: SLIPPAGE_EXCEEDED**
+```typescript
+// Solução
+const slippage = 0.5; // 0.5%
+const minOut = calculateSlippage(amountOut, slippage);
+```
+
+### Performance
+
+**P: Como otimizo requisições?**
+```typescript
+// Use cache
+const cache = new Map();
+const TTL = 20000; // 20s
+
+async function getCachedData(key) {
+  if (cache.has(key)) {
+    const { value, timestamp } = cache.get(key);
+    if (Date.now() - timestamp < TTL) {
+      return value;
+    }
+  }
+  const value = await fetchData(key);
+  cache.set(key, { value, timestamp: Date.now() });
+  return value;
+}
+```
+
+**P: Como lido com muitas atualizações?**
+```typescript
+// Debounce updates
+let timeout;
+function debouncedUpdate(data) {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    processUpdate(data);
+  }, 100);
+}
+```
+
+### Segurança
+
+**P: Como protejo chaves?**
+```typescript
+// Use variáveis de ambiente
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+
+// Nunca exponha no código
+const key = 'NEVER_DO_THIS';
+```
+
+**P: Como valido entrada?**
+```typescript
+function validateInput(input) {
+  if (!input) throw new Error('Input required');
+  if (typeof input !== 'string') throw new Error('Input must be string');
+  if (input.length > 100) throw new Error('Input too long');
+  return input.trim();
+}
+```
+
+## Exemplos
+
+### Swap Básico
+
+```typescript
+async function basicSwap() {
+  const sdk = new YieldSwap(config);
+  
+  // Conectar
+  await sdk.getWallet().connect();
+  
+  // Obter rota
+  const route = await sdk.getApi().getSwapRoute(
+    'USDC',
+    'XLM',
+    '100',
+  );
+  
+  // Simular
+  const simulation = await sdk.getApi().simulateSwapAndDeposit(
+    'USDC',
+    'XLM',
+    '100',
+    'G...',
+  );
+  
+  // Executar
+  if (simulation.success) {
+    // Execute swap
+  }
+}
+```
+
+### Monitor APY
+
+```typescript
+function monitorApy() {
+  const sdk = new YieldSwap(config);
+  
+  // Conectar
+  sdk.connect();
+  
+  // Subscrever
+  sdk.getWebSocket().subscribeToVault('vault', (data) => {
+    console.log('APY:', data.apy);
+    updateUI(data);
+  });
+  
+  // Cleanup
+  return () => sdk.disconnect();
+}
+```
+
+### Integração UI
+
+```typescript
+function SwapComponent() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  async function handleSwap() {
+    try {
+      setLoading(true);
+      await sdk.swap();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  
+  return (
+    <div>
+      {error && <Error message={error} />}
+      <Button
+        onClick={handleSwap}
+        disabled={loading}
+      >
+        {loading ? 'Loading...' : 'Swap'}
+      </Button>
+    </div>
+  );
+}
+```
+
+## Status
+
+### Serviços
+
+- API: https://status.yieldswap.com/api
+- WebSocket: https://status.yieldswap.com/ws
+- Contratos: https://status.yieldswap.com/contracts
+
+### Manutenção
+
+- Agendada: Domingos 00:00-02:00 UTC
+- Emergencial: Notificação via Discord/Email
+
+## Contato
+
+### Time
+
+- Dev Lead: dev-lead@yieldswap.com
+- Support Lead: support-lead@yieldswap.com
+- Security Lead: security-lead@yieldswap.com
+
+### Social
+
+- Twitter: @yieldswap
+- Discord: discord.gg/yieldswap
+- GitHub: github.com/yieldswap 

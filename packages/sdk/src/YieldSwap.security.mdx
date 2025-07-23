@@ -1,0 +1,180 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/Security" />
+
+# YieldSwap SDK Security
+
+## Práticas de Segurança
+
+### Validação de Entrada
+
+O SDK implementa validações rigorosas para todas as entradas:
+
+```typescript
+// Validação de endereço
+function validateAddress(address: string): boolean {
+  return /^G[A-Z0-9]{55}$/.test(address);
+}
+
+// Validação de quantidade
+function validateAmount(amount: string): boolean {
+  return new BigNumber(amount).isGreaterThan(0);
+}
+
+// Validação de slippage
+function validateSlippage(slippage: number): boolean {
+  return slippage > 0 && slippage <= 100;
+}
+```
+
+### Proteção contra Reentrancy
+
+O contrato YieldSwapRouter implementa proteção contra reentrancy:
+
+```rust
+#[contract]
+pub struct YieldSwapRouter {
+    reentrancy_guard: bool,
+}
+
+impl YieldSwapRouter {
+    fn check_reentrancy(&self) {
+        if self.reentrancy_guard {
+            panic!("Reentrancy not allowed");
+        }
+    }
+
+    fn enter(&mut self) {
+        self.reentrancy_guard = true;
+    }
+
+    fn leave(&mut self) {
+        self.reentrancy_guard = false;
+    }
+}
+```
+
+### Gerenciamento de Segredos
+
+O SDK nunca armazena ou transmite segredos diretamente:
+
+- Chaves privadas são gerenciadas pela carteira Freighter
+- Tokens de API são armazenados em variáveis de ambiente
+- Senhas e outros segredos são hasheados antes do armazenamento
+
+### Rate Limiting
+
+O SDK implementa rate limiting para evitar sobrecarga:
+
+```typescript
+const rateLimiter = new RateLimiter({
+  windowMs: 60 * 1000, // 1 minuto
+  max: 30, // 30 requisições por minuto
+});
+```
+
+### Sanitização de Dados
+
+Todos os dados são sanitizados antes do uso:
+
+```typescript
+function sanitizeInput(input: string): string {
+  return input.replace(/[<>]/g, '');
+}
+
+function sanitizeAmount(amount: string): string {
+  return amount.replace(/[^0-9.]/g, '');
+}
+```
+
+### Headers de Segurança
+
+O SDK configura headers de segurança para todas as requisições:
+
+```typescript
+const securityHeaders = {
+  'Content-Security-Policy': "default-src 'self'",
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'origin-when-cross-origin',
+};
+```
+
+### CORS
+
+O SDK implementa políticas CORS estritas:
+
+```typescript
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN,
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+```
+
+### Monitoramento e Logging
+
+O SDK utiliza Sentry para monitoramento e logging:
+
+```typescript
+function logSecurityEvent(event: SecurityEvent): void {
+  Sentry.captureMessage(event.message, {
+    level: event.level,
+    tags: {
+      type: 'security',
+      ...event.tags,
+    },
+  });
+}
+```
+
+## Checklist de Segurança
+
+### Antes da Produção
+
+- [ ] Validar todas as entradas do usuário
+- [ ] Configurar rate limiting
+- [ ] Implementar proteção contra reentrancy
+- [ ] Configurar headers de segurança
+- [ ] Configurar CORS
+- [ ] Configurar monitoramento
+- [ ] Realizar auditoria de código
+- [ ] Testar vulnerabilidades conhecidas
+- [ ] Documentar práticas de segurança
+
+### Durante a Operação
+
+- [ ] Monitorar tentativas de ataque
+- [ ] Monitorar uso anormal
+- [ ] Atualizar dependências
+- [ ] Realizar auditorias periódicas
+- [ ] Manter logs de segurança
+- [ ] Responder a incidentes
+
+## Recomendações
+
+### Para Desenvolvedores
+
+1. Sempre validar entradas
+2. Usar constantes para valores sensíveis
+3. Implementar logging adequado
+4. Seguir práticas de segurança
+5. Manter dependências atualizadas
+
+### Para Usuários
+
+1. Manter carteira segura
+2. Verificar transações
+3. Usar slippage adequado
+4. Monitorar operações
+5. Reportar problemas
+
+## Contato
+
+Para reportar vulnerabilidades de segurança:
+
+- Email: security@yieldswap.com
+- Bug Bounty: https://hackerone.com/yieldswap
+- Discord: https://discord.gg/yieldswap 

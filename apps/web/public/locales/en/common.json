@@ -1,0 +1,41 @@
+{
+  "swap": {
+    "title": "Swap & Earn",
+    "from": "From",
+    "to": "To",
+    "amount": "Amount",
+    "rate": "Exchange rate",
+    "apy": "APY",
+    "networkFee": "Network fee",
+    "minReceived": "Minimum received",
+    "button": {
+      "connect": "Connect wallet",
+      "swap": "Swap & Earn {{apy}}% APY",
+      "loading": "Processing...",
+      "success": "Transaction confirmed!",
+      "error": "Transaction failed"
+    }
+  },
+  "wallet": {
+    "connect": "Connect wallet",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "balance": "Balance: {{amount}} {{token}}"
+  },
+  "toast": {
+    "txBroadcast": "Transaction broadcasted to network",
+    "txConfirmed": "Transaction confirmed! You received {{shares}} shares",
+    "txError": "Transaction failed: {{error}}"
+  },
+  "error": {
+    "insufficientBalance": "Insufficient balance",
+    "slippageTooHigh": "Slippage too high",
+    "networkError": "Network error",
+    "unknownError": "Unknown error"
+  },
+  "aria": {
+    "maxSlippage": "Maximum allowed slippage",
+    "loadingApy": "Loading APY",
+    "swapButton": "Swap and deposit button"
+  }
+} 

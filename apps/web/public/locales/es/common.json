@@ -1,0 +1,41 @@
+{
+  "swap": {
+    "title": "Intercambiar y Ganar",
+    "from": "De",
+    "to": "A",
+    "amount": "Cantidad",
+    "rate": "Tasa de cambio",
+    "apy": "APY",
+    "networkFee": "Comisión de red",
+    "minReceived": "Mínimo recibido",
+    "button": {
+      "connect": "Conectar billetera",
+      "swap": "Intercambiar y Ganar {{apy}}% APY",
+      "loading": "Procesando...",
+      "success": "¡Transacción confirmada!",
+      "error": "Error en la transacción"
+    }
+  },
+  "wallet": {
+    "connect": "Conectar billetera",
+    "disconnect": "Desconectar",
+    "connected": "Conectado",
+    "balance": "Saldo: {{amount}} {{token}}"
+  },
+  "toast": {
+    "txBroadcast": "Transacción enviada a la red",
+    "txConfirmed": "¡Transacción confirmada! Has recibido {{shares}} shares",
+    "txError": "Error en la transacción: {{error}}"
+  },
+  "error": {
+    "insufficientBalance": "Saldo insuficiente",
+    "slippageTooHigh": "Deslizamiento demasiado alto",
+    "networkError": "Error de conexión",
+    "unknownError": "Error desconocido"
+  },
+  "aria": {
+    "maxSlippage": "Deslizamiento máximo permitido",
+    "loadingApy": "Cargando APY",
+    "swapButton": "Botón de intercambio y depósito"
+  }
+} 

@@ -1,0 +1,208 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="SDK/YieldSwap/Tests" />
+
+# YieldSwap SDK Tests
+
+## Testes Unitários
+
+O SDK inclui uma suíte completa de testes unitários para garantir a qualidade e confiabilidade do código.
+
+### Configuração
+
+Os testes são escritos usando Jest e incluem mocks para todas as dependências externas:
+
+```typescript
+// jest.setup.ts
+import '@testing-library/jest-dom';
+
+// Mock do axios
+jest.mock('axios', () => ({
+  create: jest.fn(() => ({
+    get: jest.fn(),
+    post: jest.fn(),
+  })),
+}));
+
+// Mock do socket.io-client
+jest.mock('socket.io-client', () => ({
+  io: jest.fn(() => ({
+    on: jest.fn(),
+    emit: jest.fn(),
+    disconnect: jest.fn(),
+  })),
+}));
+
+// Mock do @stellar/stellar-sdk
+jest.mock('@stellar/stellar-sdk', () => ({
+  Server: jest.fn(() => ({
+    loadAccount: jest.fn(),
+    submitTransaction: jest.fn(),
+  })),
+}));
+```
+
+### Exemplos de Testes
+
+#### YieldSwap
+
+```typescript
+describe('YieldSwap', () => {
+  const config = {
+    api: {
+      baseURL: 'http://localhost:3001',
+    },
+    websocket: {
+      url: 'ws://localhost:3001',
+    },
+  };
+
+  let sdk: YieldSwap;
+
+  beforeEach(() => {
+    sdk = new YieldSwap(config);
+  });
+
+  afterEach(() => {
+    sdk.disconnect();
+  });
+
+  it('should initialize SDK', () => {
+    expect(sdk).toBeDefined();
+    expect(sdk.getApi()).toBeDefined();
+    expect(sdk.getWebSocket()).toBeDefined();
+    expect(sdk.getWallet()).toBeDefined();
+  });
+
+  it('should connect and disconnect websocket', () => {
+    const websocket = sdk.getWebSocket();
+    const connectSpy = jest.spyOn(websocket, 'connect');
+    const disconnectSpy = jest.spyOn(websocket, 'disconnect');
+
+    sdk.connect();
+    expect(connectSpy).toHaveBeenCalled();
+
+    sdk.disconnect();
+    expect(disconnectSpy).toHaveBeenCalled();
+  });
+});
+```
+
+#### Api
+
+```typescript
+describe('Api', () => {
+  const api = new Api({
+    baseURL: 'http://localhost:3001',
+  });
+
+  it('should get swap route', async () => {
+    const route = await api.getSwapRoute('USDC', 'XLM', '100');
+    expect(route).toBeDefined();
+    expect(route.path).toBeInstanceOf(Array);
+    expect(route.amountOut).toBeDefined();
+    expect(route.priceImpact).toBeDefined();
+  });
+
+  it('should get vault APY', async () => {
+    const vault = await api.getVaultApy('XLM');
+    expect(vault).toBeDefined();
+    expect(vault.address).toBeDefined();
+    expect(vault.apy).toBeDefined();
+  });
+});
+```
+
+#### Utils
+
+```typescript
+describe('Utils', () => {
+  it('should format amount', () => {
+    expect(formatAmount('1.23456789', 7)).toBe('1.2345679');
+    expect(formatAmount(1.23456789, 7)).toBe('1.2345679');
+  });
+
+  it('should calculate price impact', () => {
+    expect(calculatePriceImpact('100', '99', '1')).toBe('1.00');
+    expect(calculatePriceImpact('100', '95', '1')).toBe('5.00');
+  });
+
+  it('should calculate slippage', () => {
+    expect(calculateSlippage('100', 0.5)).toBe('99.5000000');
+    expect(calculateSlippage('100', 1)).toBe('99.0000000');
+  });
+});
+```
+
+## Cobertura de Testes
+
+O SDK mantém uma alta cobertura de testes para garantir a qualidade do código:
+
+- Statements: > 90%
+- Branches: > 90%
+- Functions: > 90%
+- Lines: > 90%
+
+## Executando os Testes
+
+```bash
+# Executar todos os testes
+yarn test
+
+# Executar testes com cobertura
+yarn test --coverage
+
+# Executar testes em modo watch
+yarn test --watch
+
+# Executar testes de um arquivo específico
+yarn test YieldSwap.test.ts
+```
+
+## Testes de Integração
+
+Além dos testes unitários, o SDK também inclui testes de integração que verificam a interação com serviços externos:
+
+```typescript
+describe('Integration', () => {
+  const sdk = new YieldSwap({
+    api: {
+      baseURL: process.env.API_URL,
+    },
+    websocket: {
+      url: process.env.WEBSOCKET_URL,
+    },
+  });
+
+  beforeAll(() => {
+    sdk.connect();
+  });
+
+  afterAll(() => {
+    sdk.disconnect();
+  });
+
+  it('should complete swap and yield flow', async () => {
+    // 1. Get swap route
+    const route = await sdk.getApi().getSwapRoute('USDC', 'XLM', '100');
+    expect(route).toBeDefined();
+
+    // 2. Get best vault
+    const vault = await sdk.getApi().getBestVault('XLM');
+    expect(vault).toBeDefined();
+
+    // 3. Simulate transaction
+    const simulation = await sdk.getApi().simulateSwapAndDeposit(
+      'USDC',
+      'XLM',
+      '100',
+      'G...',
+    );
+    expect(simulation.success).toBe(true);
+  });
+});
+```
+
+## Testes End-to-End
+
+Para testes end-to-end completos, incluindo interação com a interface do usuário, recomendamos usar o Cypress ou o Playwright em conjunto com o SDK. 
