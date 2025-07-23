@@ -1,10 +1,9 @@
-import { useWallet } from '@stellar/wallet-kit';
-import { useTranslation } from '@/lib/i18n';
-import { Button } from '@/components/ui/button';
+import { useTranslation } from 'next-i18next';
+import { useWallet } from '../hooks/useWallet';
 
 export function WalletButton() {
-  const { t } = useTranslation();
-  const { address, connected, connect, disconnect } = useWallet();
+  const { t } = useTranslation('common');
+  const { connected, address, connect, disconnect, isConnecting } = useWallet();
 
   const handleClick = () => {
     if (connected) {
@@ -15,12 +14,17 @@ export function WalletButton() {
   };
 
   return (
-    <Button
+    <button
       onClick={handleClick}
-      variant={connected ? 'outline' : 'default'}
-      className="min-w-[160px]"
+      disabled={isConnecting}
+      className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors min-w-[160px] disabled:opacity-50"
     >
-      {connected ? (
+      {isConnecting ? (
+        <div className="flex items-center justify-center">
+          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+          Conectando...
+        </div>
+      ) : connected && address ? (
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 bg-green-400 rounded-full" />
           <span>
@@ -28,8 +32,8 @@ export function WalletButton() {
           </span>
         </div>
       ) : (
-        t('wallet.connect')
+        t('wallet.connect') || 'Conectar Carteira'
       )}
-    </Button>
+    </button>
   );
 } 

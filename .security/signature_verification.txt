@@ -1,0 +1,62 @@
+========================================================================
+YIELDSWAP PROJECT CRYPTOGRAPHIC SIGNATURE VERIFICATION
+========================================================================
+
+Project: YieldSwap - Revolutionary DeFi Platform
+Author: Jistriane Brunielli Silva de Oliveira
+Email: jistrianedroid@gmail.com
+Generated: 2025-07-23T21:12:10Z
+Expires: 2035-07-21T20:49:29Z (10 years validity)
+
+CERTIFICATE INFORMATION:
+------------------------
+Subject: CN=Jistriane Brunielli Silva de Oliveira, OU=Blockchain Development, O=YieldSwap Project, L=Brazil, ST=Brazil, C=BR
+Issuer: Self-signed certificate
+Valid From: Jul 23 20:49:29 2025 GMT
+Valid Until: Jul 21 20:49:29 2035 GMT
+Serial Number: 20EC1363A6723676137A5DC004A8FFA4B7E16AB7
+
+SIGNATURE DETAILS:
+------------------
+Algorithm: RSA-4096 with SHA-256
+Key Size: 4096 bits
+Signature File: project_signature.sig
+Manifest File: project_manifest.json
+Integrity File: file_integrity.sha256
+
+PROJECT STATISTICS:
+-------------------
+Total Files Protected: 1216
+Certificate Fingerprint: 72:5E:1E:DA:B2:5E:5A:C5:73:AC:C8:C1:8B:7F:DA:20:71:C9:E9:49:20:6F:CF:AD:C9:34:73:78:F5:D3:70:92
+
+BLOCKCHAIN DEPLOYMENT:
+----------------------
+Network: Stellar Testnet
+Contract ID: CDACQ5RS5T5CFAMV5UXNG5DUQKCAZXRZ5LUGGM7GD7SFV2KG3MLGBG2I
+Deploy Account: GD3EAVK7XKRHBQFHETYTGCMS5S42HUTWCDYIIR7QP4ADNSHLOYOTLSYH
+Transaction: d27541f3e9abd0c52bea08c21ba4249442e1ca1a4c816ed183934c5d4ad3ca23
+
+API ENDPOINTS:
+--------------
+Backend: https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app
+Documentation: https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/docs
+Health Check: https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/health
+
+VERIFICATION COMMANDS:
+----------------------
+1. Verify signature: openssl dgst -sha256 -verify yieldswap_public_key.pem -signature project_signature.sig project_manifest.json
+2. Check certificate: openssl x509 -in yieldswap_certificate.crt -text -noout
+3. Verify file integrity: sha256sum -c file_integrity.sha256
+4. Run verification script: ./verify_project_signature.sh
+
+COPYRIGHT NOTICE:
+-----------------
+© 2025 Jistriane Brunielli Silva de Oliveira. All rights reserved.
+
+This project is protected by cryptographic signatures and intellectual
+property rights. Unauthorized copying, distribution, or modification
+may violate applicable laws.
+
+For licensing inquiries, contact: jistrianedroid@gmail.com
+
+========================================================================

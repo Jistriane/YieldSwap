@@ -38,4 +38,8 @@ Cargo.lock
 
 # IDE
 .idea
-.vscode 
+.vscode # 🔐 Proteção Criptográfica Ativa
+
+# NUNCA fazer commit da chave privada!
+.security/yieldswap_private_key.pem
+.security_backup_*/

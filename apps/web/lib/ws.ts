@@ -1,88 +1,217 @@
-import { io, Socket } from 'socket.io-client';
-
 interface ApyUpdate {
   vault: string;
   asset: string;
-  apy: string;
+  apy: number;
   timestamp: number;
+  trend: 'up' | 'down' | 'stable';
+  volume24h: number;
+  tvl: number;
 }
 
-class WebSocketClient {
-  private socket: Socket | null = null;
-  private subscriptions = new Map<string, Set<(data: ApyUpdate) => void>>();
+interface WebSocketManager {
+  socket: WebSocket | null;
+  connected: boolean;
+  reconnectAttempts: number;
+  maxReconnectAttempts: number;
+  reconnectDelay: number;
+  subscriptions: Set<string>;
+  listeners: Map<string, Set<(data: any) => void>>;
+}
 
-  connect() {
-    if (this.socket?.connected) return;
+class YieldSwapWebSocket {
+  private manager: WebSocketManager = {
+    socket: null,
+    connected: false,
+    reconnectAttempts: 0,
+    maxReconnectAttempts: 5,
+    reconnectDelay: 2000,
+    subscriptions: new Set(),
+    listeners: new Map()
+  };
 
-    this.socket = io(process.env.NEXT_PUBLIC_WS_URL || '', {
-      transports: ['websocket'],
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      timeout: 10000,
-    });
+  private wsUrl: string;
 
-    this.setupEventHandlers();
+  constructor() {
+    this.wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001';
   }
 
-  private setupEventHandlers() {
-    if (!this.socket) return;
+  connect(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.manager.socket = new WebSocket(this.wsUrl);
 
-    this.socket.on('connect', () => {
-      console.log('WebSocket conectado');
-      // Resubscrever a todos os vaults após reconexão
-      this.subscriptions.forEach((_, vault) => {
-        this.socket?.emit('subscribe', { vault });
+        this.manager.socket.onopen = () => {
+          console.log('WebSocket connected');
+          this.manager.connected = true;
+          this.manager.reconnectAttempts = 0;
+          
+          // Resubscribe to existing subscriptions
+          this.manager.subscriptions.forEach(subscription => {
+            this.send('subscribe', { asset: subscription });
+          });
+
+          resolve();
+        };
+
+        this.manager.socket.onmessage = (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            this.handleMessage(message);
+          } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+          }
+        };
+
+        this.manager.socket.onclose = () => {
+          console.log('WebSocket disconnected');
+          this.manager.connected = false;
+          this.manager.socket = null;
+          this.attemptReconnect();
+        };
+
+        this.manager.socket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          reject(error);
+        };
+
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  private attemptReconnect(): void {
+    if (this.manager.reconnectAttempts >= this.manager.maxReconnectAttempts) {
+      console.error('Max reconnection attempts reached');
+      return;
+    }
+
+    this.manager.reconnectAttempts++;
+    const delay = this.manager.reconnectDelay * Math.pow(2, this.manager.reconnectAttempts - 1);
+
+    console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.manager.reconnectAttempts})`);
+
+    setTimeout(() => {
+      this.connect().catch(error => {
+        console.error('Reconnection failed:', error);
       });
-    });
-
-    this.socket.on('disconnect', () => {
-      console.log('WebSocket desconectado');
-    });
-
-    this.socket.on('apy', (data: ApyUpdate) => {
-      const subscribers = this.subscriptions.get(data.vault);
-      if (subscribers) {
-        subscribers.forEach((callback) => callback(data));
-      }
-    });
-
-    this.socket.on('error', (error: Error) => {
-      console.error('Erro no WebSocket:', error);
-    });
+    }, delay);
   }
 
-  subscribe(vault: string, callback: (data: ApyUpdate) => void) {
-    if (!this.subscriptions.has(vault)) {
-      this.subscriptions.set(vault, new Set());
-    }
-    this.subscriptions.get(vault)?.add(callback);
+  private handleMessage(message: any): void {
+    const { type, data } = message;
 
-    if (this.socket?.connected) {
-      this.socket.emit('subscribe', { vault });
+    if (type === 'apy_update') {
+      this.emit('apy_update', data);
+    } else if (type === 'error') {
+      this.emit('error', data);
+    } else if (type === 'subscribed') {
+      console.log('Successfully subscribed to:', data.asset);
+    } else if (type === 'unsubscribed') {
+      console.log('Successfully unsubscribed from:', data.asset);
+    }
+  }
+
+  private send(type: string, data: any): void {
+    if (this.manager.socket && this.manager.connected) {
+      this.manager.socket.send(JSON.stringify({ type, data }));
     } else {
-      this.connect();
+      console.warn('WebSocket not connected, cannot send message');
     }
-
-    return () => this.unsubscribe(vault, callback);
   }
 
-  unsubscribe(vault: string, callback: (data: ApyUpdate) => void) {
-    const subscribers = this.subscriptions.get(vault);
-    if (subscribers) {
-      subscribers.delete(callback);
-      if (subscribers.size === 0) {
-        this.subscriptions.delete(vault);
-        this.socket?.emit('unsubscribe', { vault });
+  subscribe(asset: string): void {
+    this.manager.subscriptions.add(asset);
+    this.send('subscribe', { asset });
+  }
+
+  unsubscribe(asset: string): void {
+    this.manager.subscriptions.delete(asset);
+    this.send('unsubscribe', { asset });
+  }
+
+  on(event: string, callback: (data: any) => void): void {
+    if (!this.manager.listeners.has(event)) {
+      this.manager.listeners.set(event, new Set());
+    }
+    this.manager.listeners.get(event)!.add(callback);
+  }
+
+  off(event: string, callback: (data: any) => void): void {
+    const listeners = this.manager.listeners.get(event);
+    if (listeners) {
+      listeners.delete(callback);
+      if (listeners.size === 0) {
+        this.manager.listeners.delete(event);
       }
     }
   }
 
-  disconnect() {
-    this.socket?.disconnect();
-    this.socket = null;
-    this.subscriptions.clear();
+  private emit(event: string, data: any): void {
+    const listeners = this.manager.listeners.get(event);
+    if (listeners) {
+      listeners.forEach(callback => {
+        try {
+          callback(data);
+        } catch (error) {
+          console.error('Error in WebSocket event listener:', error);
+        }
+      });
+    }
+  }
+
+  disconnect(): void {
+    if (this.manager.socket) {
+      this.manager.socket.close();
+      this.manager.socket = null;
+    }
+    this.manager.connected = false;
+    this.manager.subscriptions.clear();
+    this.manager.listeners.clear();
+  }
+
+  isConnected(): boolean {
+    return this.manager.connected;
+  }
+
+  getSubscriptions(): string[] {
+    return Array.from(this.manager.subscriptions);
   }
 }
 
-export const ws = new WebSocketClient(); 
+// Singleton instance
+let wsInstance: YieldSwapWebSocket | null = null;
+
+export function getWebSocketInstance(): YieldSwapWebSocket {
+  if (!wsInstance) {
+    wsInstance = new YieldSwapWebSocket();
+  }
+  return wsInstance;
+}
+
+export function connectWebSocket(): Promise<void> {
+  const ws = getWebSocketInstance();
+  return ws.connect();
+}
+
+export function subscribeToApy(asset: string, callback: (data: ApyUpdate) => void): () => void {
+  const ws = getWebSocketInstance();
+  
+  ws.on('apy_update', callback);
+  ws.subscribe(asset);
+
+  // Return unsubscribe function
+  return () => {
+    ws.off('apy_update', callback);
+    ws.unsubscribe(asset);
+  };
+}
+
+export function disconnectWebSocket(): void {
+  if (wsInstance) {
+    wsInstance.disconnect();
+    wsInstance = null;
+  }
+}
+
+export type { ApyUpdate }; 

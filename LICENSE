@@ -1,0 +1,70 @@
+MIT License - YieldSwap Project
+
+========================================================================
+CRYPTOGRAPHICALLY PROTECTED SOFTWARE LICENSE
+========================================================================
+
+Copyright (c) 2025 Jistriane Brunielli Silva de Oliveira
+
+DIGITAL SIGNATURE INFORMATION:
+------------------------------
+Author: Jistriane Brunielli Silva de Oliveira
+Email: jistrianedroid@gmail.com
+Organization: YieldSwap Project
+Certificate Serial: 20:ec:13:63:a6:72:36:76:13:7a:5d:c0:04:a8:ff:a4:b7:e1:6a:b7
+Signature Algorithm: RSA-4096 + SHA-256
+Valid Until: July 21, 2035
+
+BLOCKCHAIN DEPLOYMENT:
+----------------------
+Network: Stellar Testnet
+Contract ID: CDACQ5RS5T5CFAMV5UXNG5DUQKCAZXRZ5LUGGM7GD7SFV2KG3MLGBG2I
+Deploy Account: GD3EAVK7XKRHBQFHETYTGCMS5S42HUTWCDYIIR7QP4ADNSHLOYOTLSYH
+Transaction Hash: d27541f3e9abd0c52bea08c21ba4249442e1ca1a4c816ed183934c5d4ad3ca23
+
+AUTHENTICITY VERIFICATION:
+--------------------------
+This project is protected by cryptographic signatures. To verify authenticity:
+1. Run: ./.security/verify_project_signature.sh
+2. Check certificate: openssl x509 -in .security/yieldswap_certificate.crt -text -noout
+3. Verify signature: openssl dgst -sha256 -verify .security/yieldswap_public_key.pem -signature .security/project_signature.sig .security/project_manifest.json
+
+========================================================================
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+CRYPTOGRAPHIC PROTECTION CLAUSE:
+--------------------------------
+This software is protected by cryptographic signatures and digital certificates.
+Any unauthorized removal, modification, or tampering with the cryptographic
+protection mechanisms (.security/ directory) may violate intellectual property
+rights and applicable laws.
+
+The cryptographic signatures serve as proof of authenticity and authorship.
+Distributors and users are encouraged to verify the authenticity using the
+provided verification tools before use.
+
+DISCLAIMER:
+-----------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+========================================================================
+For licensing inquiries or authenticity verification support:
+Contact: jistrianedroid@gmail.com
+Project: https://github.com/yieldswap/yieldswap
+Documentation: https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/docs
+======================================================================== 

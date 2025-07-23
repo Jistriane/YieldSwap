@@ -1,0 +1,122 @@
+[build]
+  base = "."
+  publish = "apps/api/dist"
+  command = "pnpm install && pnpm build:api && pnpm build:functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--version"
+  PNPM_VERSION = "8.15.0"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["@nestjs/core", "@nestjs/common", "@nestjs/platform-express"]
+
+# Configuração de redirects para API
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/health"
+  status = 200
+
+[[redirects]]
+  from = "/docs"
+  to = "/.netlify/functions/docs"
+  status = 200
+
+[[redirects]]
+  from = "/docs/*"
+  to = "/.netlify/functions/docs"
+  status = 200
+
+# Headers de segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "same-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://soroban-testnet.stellar.org https://horizon-testnet.stellar.org wss://*.netlify.app"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With"
+    Access-Control-Max-Age = "86400"
+
+# Configuração de environment variables
+[context.production.environment]
+  NODE_ENV = "production"
+  PORT = "8888"
+  
+  # Stellar Testnet Configuration
+  STELLAR_NETWORK = "testnet"
+  SOROBAN_RPC_URL = "https://soroban-testnet.stellar.org"
+  STELLAR_HORIZON_URL = "https://horizon-testnet.stellar.org"
+  NETWORK_PASSPHRASE = "Test SDF Network ; September 2015"
+  
+  # CORS Configuration
+  CORS_ORIGIN = "https://yieldswap.netlify.app"
+  
+  # Rate Limiting
+  RATE_LIMIT_TTL = "60"
+  RATE_LIMIT_LIMIT = "100"
+  
+  # Logging
+  LOG_LEVEL = "info"
+  
+  # Contract Configuration (será atualizado após deploy)
+  YIELD_SWAP_CONTRACT_ID = "PLACEHOLDER_CONTRACT_ID"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "staging"
+  STELLAR_NETWORK = "testnet"
+  SOROBAN_RPC_URL = "https://soroban-testnet.stellar.org"
+  STELLAR_HORIZON_URL = "https://horizon-testnet.stellar.org"
+  NETWORK_PASSPHRASE = "Test SDF Network ; September 2015"
+  CORS_ORIGIN = "*"
+  RATE_LIMIT_TTL = "60"
+  RATE_LIMIT_LIMIT = "50"
+  LOG_LEVEL = "debug"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "development"
+  STELLAR_NETWORK = "testnet"
+  SOROBAN_RPC_URL = "https://soroban-testnet.stellar.org"
+  STELLAR_HORIZON_URL = "https://horizon-testnet.stellar.org"
+  NETWORK_PASSPHRASE = "Test SDF Network ; September 2015"
+  CORS_ORIGIN = "*"
+  RATE_LIMIT_TTL = "30"
+  RATE_LIMIT_LIMIT = "30"
+  LOG_LEVEL = "debug"
+
+# Plugin para otimização
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Configuração de cache
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true 

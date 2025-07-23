@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useAtom } from 'jotai';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { useWallet } from '@stellar/wallet-sdk';
-import { Loading, SkeletonCard } from '@yieldswap/ui';
+import { useWallet } from '../../hooks/useWallet';
+// Loading component inline
+const Loading = () => (
+  <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-200 border-t-blue-600" />
+);
 import { swapRouteAtom } from '../atoms/swap';
 import { api } from '../lib/api';
 
@@ -17,7 +20,7 @@ export function SwapForm() {
     amountIn: '',
   });
 
-  const { data: simulationData, isLoading: isSimulating, mutate: simulateSwap } = useMutation({
+  const { data: simulationData, isPending: isSimulating, mutate: simulateSwap } = useMutation({
     mutationFn: async () => {
       const response = await api.get('/v1/swap/simulate', {
         params: {
@@ -57,7 +60,7 @@ export function SwapForm() {
   };
 
   if (isLoadingApy) {
-    return <SkeletonCard className="w-full max-w-md mx-auto" />;
+    return <div className="animate-pulse bg-gray-200 h-32 rounded-lg w-full max-w-md mx-auto" />;
   }
 
   return (
@@ -136,7 +139,7 @@ export function SwapForm() {
         disabled={isSimulating}
       >
         {isSimulating ? (
-          <Loading type="spinner" className="mx-auto" />
+          <Loading />
         ) : (
           t('swap.confirm')
         )}

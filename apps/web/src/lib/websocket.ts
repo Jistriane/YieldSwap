@@ -1,91 +1,119 @@
-import { io, Socket } from 'socket.io-client';
-
 export class WebSocketManager {
-  private socket: Socket | null = null;
+  private socket: WebSocket | null = null;
+  private url: string;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
-  private reconnectDelay = 1000; // 1 segundo
-  private subscriptions: Set<string> = new Set();
+  private reconnectDelay = 2000;
+  private listeners: Map<string, Set<(data: any) => void>> = new Map();
 
-  constructor(private readonly url: string) {}
-
-  connect() {
-    if (this.socket?.connected) return;
-
-    this.socket = io(this.url, {
-      reconnection: true,
-      reconnectionAttempts: this.maxReconnectAttempts,
-      reconnectionDelay: this.reconnectDelay,
-      timeout: 10000,
-    });
-
-    this.setupEventHandlers();
+  constructor(url: string) {
+    this.url = url;
   }
 
-  private setupEventHandlers() {
-    if (!this.socket) return;
+  connect(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.socket = new WebSocket(this.url);
 
-    this.socket.on('connect', () => {
-      console.log('WebSocket conectado');
-      this.reconnectAttempts = 0;
-      
-      // Resubscrever aos vaults após reconexão
-      this.subscriptions.forEach((vault) => {
-        this.subscribeToVault(vault);
-      });
-    });
+        this.socket.onopen = () => {
+          console.log('WebSocket connected');
+          this.reconnectAttempts = 0;
+          this.emit('connect');
+          resolve();
+        };
 
-    this.socket.on('disconnect', (reason: string) => {
-      console.log('WebSocket desconectado:', reason);
-      
-      if (reason === 'io server disconnect') {
-        // Reconectar se o servidor desconectou
-        this.connect();
+        this.socket.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            this.emit('message', data);
+          } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+          }
+        };
+
+        this.socket.onclose = () => {
+          console.log('WebSocket disconnected');
+          this.emit('disconnect');
+          this.attemptReconnect();
+        };
+
+        this.socket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          this.emit('error', error);
+          reject(error);
+        };
+
+      } catch (error) {
+        reject(error);
       }
-    });
-
-    this.socket.on('connect_error', (error: Error) => {
-      console.error('Erro de conexão:', error);
-      this.reconnectAttempts++;
-
-      if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-        console.error('Máximo de tentativas de reconexão atingido');
-        this.socket?.close();
-      }
-    });
-
-    this.socket.on('error', (error: Error) => {
-      console.error('Erro no WebSocket:', error);
     });
   }
 
-  subscribeToVault(vaultAddress: string) {
-    if (!this.socket?.connected) {
-      console.warn('WebSocket não conectado. Tentando reconectar...');
-      this.connect();
+  private attemptReconnect(): void {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.error('Max reconnection attempts reached');
       return;
     }
 
-    this.socket.emit('subscribe', { vault: vaultAddress });
-    this.subscriptions.add(vaultAddress);
+    this.reconnectAttempts++;
+    const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
+
+    console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
+
+    setTimeout(() => {
+      this.connect().catch(error => {
+        console.error('Reconnection failed:', error);
+      });
+    }, delay);
   }
 
-  unsubscribeFromVault(vaultAddress: string) {
-    if (!this.socket?.connected) return;
-
-    this.socket.emit('unsubscribe', { vault: vaultAddress });
-    this.subscriptions.delete(vaultAddress);
-  }
-
-  onApyUpdate(callback: (data: { vault: string; apy: number }) => void) {
-    this.socket?.on('apyUpdate', callback);
-  }
-
-  disconnect() {
-    if (this.socket) {
-      this.socket.disconnect();
-      this.socket = null;
-      this.subscriptions.clear();
+  send(data: any): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify(data));
+    } else {
+      console.warn('WebSocket not connected, cannot send message');
     }
+  }
+
+  on(event: string, callback: (data: any) => void): void {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, new Set());
+    }
+    this.listeners.get(event)!.add(callback);
+  }
+
+  off(event: string, callback: (data: any) => void): void {
+    const listeners = this.listeners.get(event);
+    if (listeners) {
+      listeners.delete(callback);
+      if (listeners.size === 0) {
+        this.listeners.delete(event);
+      }
+    }
+  }
+
+  private emit(event: string, data?: any): void {
+    const listeners = this.listeners.get(event);
+    if (listeners) {
+      listeners.forEach(callback => {
+        try {
+          callback(data);
+        } catch (error) {
+          console.error('Error in WebSocket event listener:', error);
+        }
+      });
+    }
+  }
+
+  disconnect(): void {
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
+    }
+    this.listeners.clear();
+  }
+
+  isConnected(): boolean {
+    return this.socket?.readyState === WebSocket.OPEN;
   }
 } 
