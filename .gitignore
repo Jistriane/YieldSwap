@@ -1,45 +1,55 @@
-# dependencies
-node_modules
-.pnp
-.pnp.js
+# Arquivos de certificado e chaves
+.security/certificates/private.key
+.security/certificates/*.key.bak
+.security/certificates/*.pem.bak
 
-# testing
-coverage
+# Permitir
+!.security/certificates/public.key
+!.security/certificates/certificate.pem
+!.security/certificates/config.cnf
+!.security/certificates/*.sh
+!.security/certificates/manifest.json
+!.security/certificates/signature.sha512
 
-# next.js
+# Outros arquivos sensíveis
+.env*
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+*.csr
+*.der
+*.p7b
+*.p7r
+*.spc
+*.sst
+*.stl
+
+# Backups e temporários
+*.bak
+*.tmp
+*.temp
+*~
+
+# Dependências e builds
+node_modules/
+dist/
+build/
 .next/
 out/
-build
-dist
+.cache/
+.turbo/
 
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Logs e debug
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
+debug.log
 
-# local env files
-.env
-.env*.local
-.env-*
-
-# turbo
-.turbo
-
-# vercel
-.vercel
-
-# rust
-target/
-Cargo.lock
-
-# IDE
-.idea
-.vscode # 🔐 Proteção Criptográfica Ativa
-
-# NUNCA fazer commit da chave privada!
-.security/yieldswap_private_key.pem
-.security_backup_*/
+# Sistema
+.DS_Store
+Thumbs.db

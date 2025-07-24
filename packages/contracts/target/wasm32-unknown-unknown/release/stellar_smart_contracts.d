@@ -1,0 +1,1 @@
+/home/jistriane/Documentos/Projetos/YieldSwap/packages/contracts/target/wasm32-unknown-unknown/release/stellar_smart_contracts.wasm: /home/jistriane/Documentos/Projetos/YieldSwap/packages/contracts/src/lib.rs
