@@ -1,55 +1,43 @@
-# Arquivos de certificado e chaves
-.security/certificates/private.key
-.security/certificates/*.key.bak
-.security/certificates/*.pem.bak
+# Arquivos de segurança
+.security/private.key
+.security/*.key.bak
+.security/*.pem.bak
 
 # Permitir
-!.security/certificates/public.key
-!.security/certificates/certificate.pem
-!.security/certificates/config.cnf
-!.security/certificates/*.sh
-!.security/certificates/manifest.json
-!.security/certificates/signature.sha512
+!.security/public.key
+!.security/certificate.pem
+!.security/sign_project.sh
+!.security/manifest.json
+!.security/signature.sha512
 
-# Outros arquivos sensíveis
-.env*
-*.pem
-*.key
-*.p12
-*.pfx
-*.cer
-*.crt
-*.csr
-*.der
-*.p7b
-*.p7r
-*.spc
-*.sst
-*.stl
-
-# Backups e temporários
-*.bak
-*.tmp
-*.temp
-*~
-
-# Dependências e builds
+# Dependências
 node_modules/
-dist/
-build/
+.pnp
+.pnp.js
+
+# Builds
 .next/
 out/
-.cache/
-.turbo/
+build/
+dist/
 
-# Logs e debug
-*.log
+# Misc
+.DS_Store
+*.pem
+.env*
+.env.local
+.env-*
+
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-debug.log
 
-# Sistema
-.DS_Store
-Thumbs.db
+# IDE
+.idea/
+.vscode/
+
+# Rust
+target/
+Cargo.lock

@@ -1,0 +1,1 @@
+2025-07-23T11:44:41.817562Z  WARN turborepo_filewatch: encountered error watching filesystem filewatching backend error: OS file watch limit reached. about ["/home/jistriane/Documentos/Projetos/YieldSwap/apps/api/dist"]

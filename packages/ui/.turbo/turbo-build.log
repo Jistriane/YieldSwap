@@ -1,0 +1,81 @@
+
+
+> @yieldswap/ui@0.1.0 build /home/jistriane/Documentos/Projetos/YieldSwap/packages/ui
+> tsup src/index.tsx --format esm,cjs --dts --external react
+
+[34mCLI[39m Building entry: src/index.tsx
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v6.7.0
+[34mCLI[39m Target: es2018
+[34mESM[39m Build start
+[34mCJS[39m Build start
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "@sentry/react"[0m
+
+    src/sentry.ts:1:24:
+[37m      1 │ import * as Sentry from [32m'@sentry/react'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "@sentry/react" as external to exclude it from the bundle, which will
+  remove this error.
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "@sentry/react"[0m
+
+    src/ErrorBoundary.tsx:2:24:
+[37m      2 │ import * as Sentry from [32m'@sentry/react'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "@sentry/react" as external to exclude it from the bundle, which will
+  remove this error.
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "@sentry/react"[0m
+
+    src/sentry.ts:1:24:
+[37m      1 │ import * as Sentry from [32m'@sentry/react'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "@sentry/react" as external to exclude it from the bundle, which will
+  remove this error.
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "@sentry/react"[0m
+
+    src/ErrorBoundary.tsx:2:24:
+[37m      2 │ import * as Sentry from [32m'@sentry/react'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~[0m
+
+  You can mark the path "@sentry/react" as external to exclude it from the bundle, which will
+  remove this error.
+
+[31mESM[39m [31mBuild failed[39m
+[31mError: Build failed with 2 errors:
+src/ErrorBoundary.tsx:2:24: ERROR: Could not resolve "@sentry/react"
+src/sentry.ts:1:24: ERROR: Could not resolve "@sentry/react"
+    at failureErrorWithLog (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:1636:15)
+    at /home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:1048:25
+    at runOnEndCallbacks (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:1471:45)
+    at buildResponseToResult (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:1046:7)
+    at /home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:1075:16
+    at responseCallbacks.<computed> (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:697:9)
+    at handleIncomingPacket (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:752:9)
+    at Socket.readFromStdout (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/esbuild@0.17.19/node_modules/esbuild/lib/main.js:673:7)
+    at Socket.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)[39m
+[31mCJS[39m [31mBuild failed[39m
+[34mDTS[39m Build start
+src/Button.tsx(47,30): error TS2322: Type '{ size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & LoadingProps'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & LoadingProps'.
+
+[31mDTS[39m [31mBuild error[39m
+[31mRollupError: Failed to compile. Check the logs above.
+    at error (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:353:30)
+    at Object.error (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:1721:20)
+    at Object.error (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:25627:42)
+    at generateDtsFromTs (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/tsup@6.7.0_postcss@8.5.6_ts-node@10.9.2_@types+node@20.19.9_typescript@5.8.3__typescript@5.8.3/node_modules/tsup/dist/rollup.js:7498:22)
+    at /home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/tsup@6.7.0_postcss@8.5.6_ts-node@10.9.2_@types+node@20.19.9_typescript@5.8.3__typescript@5.8.3/node_modules/tsup/dist/rollup.js:7505:59
+    at _nullishCoalesce (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/tsup@6.7.0_postcss@8.5.6_ts-node@10.9.2_@types+node@20.19.9_typescript@5.8.3__typescript@5.8.3/node_modules/tsup/dist/rollup.js:1:198)
+    at Object.transform (/home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/tsup@6.7.0_postcss@8.5.6_ts-node@10.9.2_@types+node@20.19.9_typescript@5.8.3__typescript@5.8.3/node_modules/tsup/dist/rollup.js:7505:18)
+    at /home/jistriane/Documentos/Projetos/YieldSwap/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:1914:40[39m
+src/ErrorBoundary.tsx(2,25): error TS2307: Cannot find module '@sentry/react' or its corresponding type declarations.
+
+src/sentry.ts(1,25): error TS2307: Cannot find module '@sentry/react' or its corresponding type declarations.
+
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m
