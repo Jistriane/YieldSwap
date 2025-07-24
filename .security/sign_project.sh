@@ -34,10 +34,14 @@ if [ ! -d "$SECURITY_DIR" ]; then
     chmod 700 "$SECURITY_DIR"
 fi
 
-# Solicita senha
-log "Digite sua senha de assinatura:"
-read -s PASSWORD
-echo
+# Usa senha do ambiente ou solicita
+if [ -z "$YIELDSWAP_PASSWORD" ]; then
+    log "Digite sua senha de assinatura:"
+    read -s PASSWORD
+    echo
+else
+    PASSWORD="$YIELDSWAP_PASSWORD"
+fi
 
 # Valida senha
 if [ ${#PASSWORD} -lt 12 ]; then
