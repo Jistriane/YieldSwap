@@ -3,15 +3,17 @@
 **Plataforma DeFi completa para swap e yield farming na rede Stellar**
 
 [![Deploy Status](https://img.shields.io/badge/Deploy-Live-brightgreen)](https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app)
+[![Frontend Status](https://img.shields.io/badge/Frontend-Live-brightgreen)](https://web-2qcbrj87a-jistrianes-projects.vercel.app)
 [![API Status](https://img.shields.io/badge/API-Online-success)](https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/health)
 [![Network](https://img.shields.io/badge/Network-Stellar%20Testnet-blue)](https://stellar.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-## 🚀 **Deploy em Produção - ATIVO**
+## 🚀 **Deploy em Produção - SISTEMA COMPLETO ATIVO**
 
 ### 🌐 **URLs Funcionais:**
 
+- **🎨 Frontend**: `https://web-2qcbrj87a-jistrianes-projects.vercel.app`
 - **🚀 API Principal**: `https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app`
 - **🏥 Health Check**: `https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/health`
 - **📚 Documentação API**: `https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/docs`
@@ -243,21 +245,22 @@ ENABLE_HELMET=true
 
 ### **✅ Concluído**
 - [x] **Backend API** - Deployado na Vercel
+- [x] **Frontend UI** - Deployado na Vercel
 - [x] **Health Checks** - Monitoramento ativo
 - [x] **Documentação** - Swagger UI funcional
 - [x] **Segurança** - Headers e validações
 - [x] **Stellar Integration** - Testnet configurada
+- [x] **Integração Completa** - Frontend + Backend funcionais
 
 ### **🔄 Em Progresso**
-- [ ] **Frontend Deploy** - Next.js na Vercel
 - [ ] **Contratos Soroban** - Deploy na testnet
-- [ ] **Integração Completa** - Frontend + Backend + Contracts
+- [ ] **Testes E2E** - Cypress/Playwright
+- [ ] **Monitoramento Avançado** - Grafana/Prometheus
 
 ### **📅 Planejado**
-- [ ] **Testes E2E** - Cypress/Playwright
-- [ ] **Monitoramento Avançado** - Grafana/Prometheus  
 - [ ] **CI/CD Pipeline** - GitHub Actions
 - [ ] **Mainnet Deploy** - Produção Stellar
+- [ ] **Mobile App** - React Native
 
 ## 🤝 **Contribuindo**
 
@@ -309,13 +312,14 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 🎉 **Status do Projeto**
 
-**✅ BACKEND DEPLOYADO E FUNCIONAL**  
+**✅ SISTEMA COMPLETO DEPLOYADO E FUNCIONAL**  
+**🎨 FRONTEND ONLINE NA VERCEL**  
 **🌐 API ONLINE NA VERCEL**  
 **📚 DOCUMENTAÇÃO ATIVA**  
 **🔐 SEGURANÇA CONFIGURADA**  
 **⭐ STELLAR TESTNET INTEGRADA**
 
-**🚀 Pronto para desenvolvimento e testes!**
+**🚀 Sistema em produção e pronto para uso!**
 
 ---
 
