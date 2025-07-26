@@ -1,134 +1,86 @@
-/*
- * 🔐 ARQUIVO ASSINADO DIGITALMENTE
- * 
- * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
- * 📅 Validade: 10 anos (até 2035)
- * 🔒 Método: RSA-4096 + SHA-512
- * 📜 Verificação: SIGNATURE.md
- * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
- */
-
-
 #!/bin/bash
-set -e
-
-# Configurações
-SECURITY_DIR=".security"
-PRIVATE_KEY="$SECURITY_DIR/private.key"
-PUBLIC_KEY="$SECURITY_DIR/public.key"
-MANIFEST="$SECURITY_DIR/manifest.json"
-SIGNATURE="$SECURITY_DIR/signature.sha512"
-CERT_FILE="$SECURITY_DIR/certificate.pem"
 
 # Cores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Função para imprimir mensagens
-log() {
-    echo -e "${BLUE}[YieldSwap]${NC} $1"
-}
-
-error() {
-    echo -e "${RED}[ERRO]${NC} $1"
-}
-
-success() {
-    echo -e "${GREEN}[✓]${NC} $1"
-}
-
-# Verifica se já existe a estrutura
-if [ ! -d "$SECURITY_DIR" ]; then
-    mkdir -p "$SECURITY_DIR"
-    chmod 700 "$SECURITY_DIR"
-fi
-
-# Usa senha do ambiente ou solicita
+# Verifica se a senha foi fornecida via variável de ambiente
 if [ -z "$YIELDSWAP_PASSWORD" ]; then
-    log "Digite sua senha de assinatura:"
-    read -s PASSWORD
-    echo
-else
-    PASSWORD="$YIELDSWAP_PASSWORD"
-fi
-
-# Valida senha
-if [ ${#PASSWORD} -lt 12 ]; then
-    error "A senha deve ter pelo menos 12 caracteres"
+    echo -e "${RED}❌ ERRO: Senha não fornecida via YIELDSWAP_PASSWORD${NC}"
     exit 1
 fi
 
-# Gera chaves se não existirem
-if [ ! -f "$PRIVATE_KEY" ]; then
-    log "Gerando par de chaves RSA-4096..."
-    openssl genpkey -algorithm RSA -aes256 -pass pass:"$PASSWORD" \
-        -pkeyopt rsa_keygen_bits:4096 -out "$PRIVATE_KEY"
-    openssl rsa -pubout -in "$PRIVATE_KEY" -passin pass:"$PASSWORD" -out "$PUBLIC_KEY"
-    chmod 600 "$PRIVATE_KEY"
-    chmod 644 "$PUBLIC_KEY"
-    success "Chaves geradas com sucesso"
+# Diretório de segurança
+SECURITY_DIR=".security"
+mkdir -p "$SECURITY_DIR"
+
+# Gera chave privada RSA-4096 se não existir
+if [ ! -f "$SECURITY_DIR/private.key" ]; then
+    openssl genpkey -algorithm RSA -out "$SECURITY_DIR/private.key" -pkeyopt rsa_keygen_bits:4096
+    chmod 600 "$SECURITY_DIR/private.key"
 fi
 
-# Gera certificado se não existir
-if [ ! -f "$CERT_FILE" ]; then
-    log "Gerando certificado digital..."
-    openssl req -x509 -new -nodes -key "$PRIVATE_KEY" -passin pass:"$PASSWORD" \
-        -sha512 -days 3650 \
-        -subj "/C=BR/ST=Brazil/L=Brazil/O=Jistriane Projects/OU=Blockchain Development/CN=Jistriane Brunielli Silva de Oliveira" \
-        -out "$CERT_FILE"
-    chmod 644 "$CERT_FILE"
-    success "Certificado gerado com sucesso"
+# Gera chave pública se não existir
+if [ ! -f "$SECURITY_DIR/public.key" ]; then
+    openssl rsa -pubout -in "$SECURITY_DIR/private.key" -out "$SECURITY_DIR/public.key"
 fi
 
-# Gera manifest do projeto
-log "Gerando manifest do projeto..."
-{
-    echo '{'
-    echo '  "project": "YieldSwap",'
-    echo '  "author": "Jistriane Brunielli Silva de Oliveira",'
-    echo '  "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'",'
-    echo '  "certificate": "'$(openssl x509 -noout -fingerprint -sha512 -in "$CERT_FILE" | cut -d= -f2)'",'
-    echo '  "files": ['
+# Gera certificado X.509 se não existir
+if [ ! -f "$SECURITY_DIR/certificate.pem" ]; then
+    openssl req -new -x509 -key "$SECURITY_DIR/private.key" -out "$SECURITY_DIR/certificate.pem" \
+        -days 3650 -subj "/CN=Jistriane Brunielli Silva de Oliveira/O=YieldSwap Project" \
+        -addext "keyUsage=digitalSignature,keyEncipherment" \
+        -addext "extendedKeyUsage=codeSigning"
+fi
+
+# Gera manifest com hashes dos arquivos
+echo -e "${YELLOW}[YieldSwap] Gerando manifest do projeto...${NC}"
+
+manifest_file="$SECURITY_DIR/manifest.json"
+echo "{" > "$manifest_file"
+echo "  \"author\": \"Jistriane Brunielli Silva de Oliveira\"," >> "$manifest_file"
+echo "  \"project\": \"YieldSwap\"," >> "$manifest_file"
+echo "  \"timestamp\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"," >> "$manifest_file"
+echo "  \"validity\": \"10 years\"," >> "$manifest_file"
+echo "  \"certificate_fingerprint\": \"$(openssl x509 -fingerprint -sha512 -noout -in $SECURITY_DIR/certificate.pem | cut -d= -f2)\"," >> "$manifest_file"
+echo "  \"files\": {" >> "$manifest_file"
+
+# Gera hashes SHA-512 de todos os arquivos relevantes
+first=true
+find . -type f \
+    ! -path "./.git/*" \
+    ! -path "./node_modules/*" \
+    ! -path "./.security/manifest.json" \
+    ! -path "./.security/signature.sha512" \
+    -print0 | while IFS= read -r -d '' file; do
     
-    # Lista todos os arquivos (exceto .git, node_modules e .security)
-    find . -type f \
-        ! -path "./.git/*" \
-        ! -path "./node_modules/*" \
-        ! -path "./.security/*" \
-        ! -path "./*/node_modules/*" \
-        ! -path "./*/target/*" \
-        ! -path "./*/dist/*" \
-        -exec sha512sum {} \; | while read -r hash file; do
-        echo "    {"
-        echo "      \"path\": \"${file:2}\","
-        echo "      \"sha512\": \"$hash\""
-        echo "    },"
-    done | sed '$ s/,$//'
+    if [ "$first" = true ]; then
+        first=false
+    else
+        echo "," >> "$manifest_file"
+    fi
     
-    echo '  ],'
-    echo '  "validity": {'
-    echo '    "start": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'",'
-    echo '    "end": "'$(date -u -d "+10 years" +"%Y-%m-%dT%H:%M:%SZ")'"'
-    echo '  }'
-    echo '}'
-} > "$MANIFEST"
+    hash=$(openssl dgst -sha512 "$file" | cut -d" " -f2)
+    echo -n "    \"${file:2}\": \"$hash\"" >> "$manifest_file"
+done
+
+echo -e "\n  }\n}" >> "$manifest_file"
 
 # Assina o manifest
-log "Assinando projeto..."
-openssl dgst -sha512 -sign "$PRIVATE_KEY" -passin pass:"$PASSWORD" \
-    -out "$SIGNATURE" "$MANIFEST"
+echo -e "${YELLOW}[YieldSwap] Assinando projeto...${NC}"
+echo -n "$YIELDSWAP_PASSWORD" | openssl dgst -sha512 -sign "$SECURITY_DIR/private.key" -passin stdin -out "$SECURITY_DIR/signature.sha512" "$manifest_file"
 
-# Verifica a assinatura
-if openssl dgst -sha512 -verify "$PUBLIC_KEY" \
-    -signature "$SIGNATURE" "$MANIFEST" > /dev/null 2>&1; then
-    success "Projeto assinado com sucesso!"
-    success "📜 Assinatura: $SIGNATURE"
-    success "📋 Manifest: $MANIFEST"
-    success "🔒 Certificado: $CERT_FILE"
-    success "📅 Validade: 10 anos"
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}[✓] Projeto assinado com sucesso!${NC}"
+    echo -e "${GREEN}[✓] 📜 Assinatura: $SECURITY_DIR/signature.sha512${NC}"
+    echo -e "${GREEN}[✓] 📋 Manifest: $SECURITY_DIR/manifest.json${NC}"
+    echo -e "${GREEN}[✓] 🔒 Certificado: $SECURITY_DIR/certificate.pem${NC}"
+    echo -e "${GREEN}[✓] 📅 Validade: 10 anos${NC}"
+    echo -e "${GREEN}✅ Projeto assinado com sucesso. Continuando com o push...${NC}"
+    exit 0
 else
-    error "Falha na verificação da assinatura!"
+    echo -e "${RED}❌ ERRO: Falha na assinatura do projeto!${NC}"
     exit 1
 fi 
