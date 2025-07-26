@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[\"default\", \"std\"]","declared_features":"[\"coresymbolication\", \"cpp_demangle\", \"dbghelp\", \"default\", \"dladdr\", \"gimli-symbolize\", \"kernel32\", \"libbacktrace\", \"libunwind\", \"rustc-serialize\", \"serde\", \"serialize-rustc\", \"serialize-serde\", \"std\", \"unix-backtrace\", \"verify-winapi\", \"winapi\"]","target":17883862002600103897,"profile":2225463790103693989,"path":14674767307242494931,"deps":[[15056754423999335055,"cc",false,12407411796787240481]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/backtrace-a1d1e2d428343638/dep-build-script-build-script-build","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

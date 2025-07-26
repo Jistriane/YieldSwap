@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[]","declared_features":"[\"next\", \"serde\", \"shallow-val-hash\", \"std\", \"testutils\", \"tracy\", \"wasmi\"]","target":8236493655205561077,"profile":1486152711610702103,"path":7731836927639207328,"deps":[[5157631553186200874,"num_traits",false,250441806219296305],[5342134337365610235,"build_script_build",false,7508360343799242313],[7898571650830454567,"ethnum",false,8490247922569144061],[8890677204472915189,"stellar_xdr",false,6090610547326620185],[8956798774457214699,"soroban_env_macros",false,4520912074116600769],[11263754829263059703,"num_derive",false,6895699228897443700],[13785866025199020095,"static_assertions",false,2388540764930438604]],"local":[{"CheckDepInfo":{"dep_info":"wasm32-unknown-unknown/release/.fingerprint/soroban-env-common-f7d2926679d0a598/dep-lib-soroban_env_common","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":14682669768258224367}

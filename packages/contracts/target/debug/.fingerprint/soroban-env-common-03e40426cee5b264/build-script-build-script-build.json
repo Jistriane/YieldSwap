@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[\"serde\", \"shallow-val-hash\", \"std\", \"testutils\", \"wasmi\"]","declared_features":"[\"next\", \"serde\", \"shallow-val-hash\", \"std\", \"testutils\", \"tracy\", \"wasmi\"]","target":5408242616063297496,"profile":2225463790103693989,"path":11126844522969935902,"deps":[[14436471438139416390,"crate_git_revision",false,15176302047742127218]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/soroban-env-common-03e40426cee5b264/dep-build-script-build-script-build","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

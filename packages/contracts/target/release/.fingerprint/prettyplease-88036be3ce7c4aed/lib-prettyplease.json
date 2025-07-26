@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[]","declared_features":"[\"verbatim\"]","target":18079971044633511930,"profile":12935912534734832910,"path":10389922336631428560,"deps":[[3060637413840920116,"proc_macro2",false,14439003714620861644],[4974441333307933176,"syn",false,16257981466666286181],[12001505777860819314,"build_script_build",false,2656490655550694829]],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/prettyplease-88036be3ce7c4aed/dep-lib-prettyplease","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

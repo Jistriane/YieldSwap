@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[\"default\", \"suggestions\"]","declared_features":"[\"default\", \"diagnostics\", \"suggestions\"]","target":10425393644641512883,"profile":13699910019810031872,"path":3491892743361826218,"deps":[[391311489375721310,"darling_macro",false,3452981689548064306],[7492649247881633246,"darling_core",false,8056790136483456025]],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/darling-ce6edabd03f05781/dep-lib-darling","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

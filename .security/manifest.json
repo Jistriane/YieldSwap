@@ -1,7 +1,18 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {
   "project": "YieldSwap",
   "author": "Jistriane Brunielli Silva de Oliveira",
-  "timestamp": "2025-07-24T12:08:45Z",
+  "timestamp": "2025-07-26T10:00:42Z",
   "certificate": "A6:F3:EC:C8:27:4F:32:36:F3:4F:E1:1D:B9:21:C9:B4:31:3C:B5:67:E4:2B:06:24:8B:3E:9A:79:38:D0:F7:DB:7D:36:37:43:24:B6:96:C1:97:2E:CF:7D:27:6D:BA:C6:F3:C4:22:A1:76:9F:35:50:D5:58:7B:B1:5A:AA:C0:AB",
   "files": [
     {
@@ -342,7 +353,7 @@
     },
     {
       "path": "README.en.md",
-      "sha512": "d69ad3d908c3824c899f66ac64ffe92d64443ecc91555452e31910563b6951266ca98c008fb1f9e01f497ab649739177348d233aaa8f0c970de4459422c2b9a4"
+      "sha512": "e7ff26789b550a0183cb7a77b829493084512c6512badbe8b09da327b5e395aefbe6a6ac0d4e59bcddc1323b60b3156817f6d0ecfba7e98da6597fb676a1950d"
     },
     {
       "path": ".gitignore",
@@ -1386,7 +1397,7 @@
     },
     {
       "path": "YIELDSWAP_FULL_DOCUMENTATION.md",
-      "sha512": "420147124dfe17f333011382c084e2d81647ccf50176a24ccfcb2d0b069d99eb9b96fe4a477a187153cb7c2ceb080c23867f2f13b92d115dd2d441a8c89a9e72"
+      "sha512": "a3f25dfe7e4a05a53b1bbb7d11a902a07b1115bd619171e428b9be469f2bb73602c3f0c00724e4fbba92030bd5abe49b036f99dd2993ca3ecd1568b8e9784caa"
     },
     {
       "path": "tailwind.config.js",
@@ -2037,6 +2048,10 @@
       "sha512": "bc66e4d9c102b81cb9ec4e11f563943dc102da30b7becdf2b970e258abf1942c9f772ab1e216965cb46341660773f0dd83c6581584f4984e4a69d928f5bfeccb"
     },
     {
+      "path": "SIGNATURE.md",
+      "sha512": "ab6bb559790913e5d7703ae008f96d9bb517d5e5aa18a6e58a6a84770ecb234dc48822c0456d2cf5957668d0d345d587b90a655da1208cc360afcee4b72d70af"
+    },
+    {
       "path": "netlify/functions/docs.js",
       "sha512": "7507ac14c22518e098ea3a0971d52ebf1375e4917754b2139e754bf9de3520aefc93580e5518a30f485842b6998f034f77faf12688d65182abceecf22b1b20d7"
     },
@@ -2082,7 +2097,7 @@
     },
     {
       "path": "YIELDSWAP_DOCUMENTACAO_COMPLETA.md",
-      "sha512": "a5200f4f2a2f36885f726fb5041bf111ca5fc7f28b9c83fa1b742a5b7e378a964a04212562473fb9bd41baa896fb5a23c42d5e9e0d372a0acb92befdba3c97fd"
+      "sha512": "6f5f8d48e72277c75b0fe7ba989e03a4e46712f47d02054d2da48a5cbb9f68ef4f38ff07329fa07d405f9d235706b47f820eed983b1691fa79561497e39c2e48"
     },
     {
       "path": ".eslintrc.js",
@@ -2166,15 +2181,19 @@
     },
     {
       "path": "README.md",
-      "sha512": "e97048c4a08b108b87882bbdd9ff9699e8e9630ef837b4f12c359be812d4731ea793ddd3c0ad4830db05876ce855c81a9262344ceec72169ac911b20228f3e19"
+      "sha512": "b86fd7797bab4bc7f5a57bf26c8f9b118d0d115f632d776fc7d25acdc7ae79a749a2a4d286e73d7d82bb74105750ae3089f6fa998532cf5171083869a09c8a04"
     },
     {
       "path": "components/ApyTicker.tsx",
       "sha512": "f90ddd77e400dfe6a3fcf479b00b1ee29e7015c5bb8cd70f5f15b4886cc339275ff553fc8a053f8ddc7324f45168cffaf81f8c3ac93996f6536eef38e5e40768"
+    },
+    {
+      "path": "SIGNATURE.en.md",
+      "sha512": "6c71c1c7e833a9c9bae6d3514fd287b9428a842ce00febfab5e1cbea287c7f1f86758b5a52b5f282250a09ccf966dc9d5ef04bdf00110e26d17fecd36d28c2c8"
     }
   ],
   "validity": {
-    "start": "2025-07-24T12:08:46Z",
-    "end": "2035-07-24T12:08:46Z"
+    "start": "2025-07-26T10:00:44Z",
+    "end": "2035-07-26T10:00:44Z"
   }
 }

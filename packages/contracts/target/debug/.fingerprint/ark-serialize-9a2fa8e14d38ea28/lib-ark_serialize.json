@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[\"ark-serialize-derive\", \"default\", \"derive\"]","declared_features":"[\"ark-serialize-derive\", \"default\", \"derive\", \"std\"]","target":16729684394590524608,"profile":15657897354478470176,"path":5670212056041550464,"deps":[[6087741167004821266,"num_bigint",false,7163860059212701150],[7268467838334338655,"ark_serialize_derive",false,1111361524193078200],[15179503056858879355,"ark_std",false,1575016691502631025],[17475753849556516473,"digest",false,3943892354441200415]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/ark-serialize-9a2fa8e14d38ea28/dep-lib-ark_serialize","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

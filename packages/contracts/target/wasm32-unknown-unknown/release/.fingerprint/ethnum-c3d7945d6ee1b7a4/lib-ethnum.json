@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[]","declared_features":"[\"ethnum-intrinsics\", \"llvm-intrinsics\", \"macros\", \"serde\"]","target":17821491841471188963,"profile":1486152711610702103,"path":8542220462228487759,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"wasm32-unknown-unknown/release/.fingerprint/ethnum-c3d7945d6ee1b7a4/dep-lib-ethnum","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":14682669768258224367}

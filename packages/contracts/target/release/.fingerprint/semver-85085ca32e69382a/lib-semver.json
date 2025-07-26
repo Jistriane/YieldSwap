@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[\"default\", \"std\"]","declared_features":"[\"default\", \"serde\", \"std\"]","target":10123455430689237779,"profile":12935912534734832910,"path":4719666076479563619,"deps":[[4899080583175475170,"build_script_build",false,13286910452686856864]],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/semver-85085ca32e69382a/dep-lib-semver","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

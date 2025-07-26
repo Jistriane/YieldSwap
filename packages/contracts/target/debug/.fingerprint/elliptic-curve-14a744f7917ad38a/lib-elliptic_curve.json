@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[\"alloc\", \"arithmetic\", \"digest\", \"ff\", \"group\", \"hazmat\", \"pkcs8\", \"sec1\", \"std\"]","declared_features":"[\"alloc\", \"arithmetic\", \"bits\", \"default\", \"dev\", \"digest\", \"ecdh\", \"ff\", \"group\", \"hash2curve\", \"hazmat\", \"jwk\", \"pem\", \"pkcs8\", \"sec1\", \"serde\", \"std\", \"voprf\"]","target":3243834021826523897,"profile":15657897354478470176,"path":791459897217889796,"deps":[[5218994449591892524,"sec1",false,335691408346642709],[6528079939221783635,"zeroize",false,10022011227589887086],[10520923840501062997,"generic_array",false,16511951751703766039],[11558297082666387394,"crypto_bigint",false,2328736025329006389],[13163366046229301192,"group",false,13556825803283228299],[16464744132169923781,"ff",false,14960697505611905428],[16530257588157702925,"base16ct",false,11736474041298113600],[17003143334332120809,"subtle",false,18401228915062956104],[17064813216363465056,"pkcs8",false,12004074705143310528],[17475753849556516473,"digest",false,9529170306533581458],[18130209639506977569,"rand_core",false,17980848581949687695]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/elliptic-curve-14a744f7917ad38a/dep-lib-elliptic_curve","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}

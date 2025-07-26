@@ -1,1 +1,12 @@
+/*
+ * 🔐 ARQUIVO ASSINADO DIGITALMENTE
+ * 
+ * ✍️ Assinado por: Jistriane Brunielli Silva de Oliveira
+ * 📅 Validade: 10 anos (até 2035)
+ * 🔒 Método: RSA-4096 + SHA-512
+ * 📜 Verificação: SIGNATURE.md
+ * ⚠️  MODIFICAÇÕES NÃO AUTORIZADAS INVALIDARÃO A ASSINATURA
+ */
+
+
 {"rustc":11410426090777951712,"features":"[]","declared_features":"[\"arrayvec\", \"arrayvec05\", \"arrayvec07\", \"bigdecimal\", \"bigdecimal03\", \"bigdecimal04\", \"bytes\", \"chrono\", \"default\", \"derive\", \"derive_json_schema\", \"either\", \"enumset\", \"impl_json_schema\", \"indexmap\", \"indexmap1\", \"indexmap2\", \"preserve_order\", \"raw_value\", \"rust_decimal\", \"schemars_derive\", \"semver\", \"smallvec\", \"smol_str\", \"ui_test\", \"url\", \"uuid\", \"uuid08\", \"uuid1\"]","target":11155677158530064643,"profile":12935912534734832910,"path":6508961911515496962,"deps":[[6913375703034175521,"build_script_build",false,14112671007684916845],[8569119365930580996,"serde_json",false,13417427052876474047],[9122563107207267705,"dyn_clone",false,17697417291740836906],[9689903380558560274,"serde",false,9544717673288041117]],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/schemars-0b0400124a09be11/dep-lib-schemars","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
