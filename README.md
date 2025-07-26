@@ -8,6 +8,7 @@
 [![Network](https://img.shields.io/badge/Network-Stellar%20Testnet-blue)](https://stellar.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Digital Signature](https://img.shields.io/badge/Signed-RSA_4096-red)](SIGNATURE.md)
 
 ## 🚀 **Deploy em Produção - SISTEMA COMPLETO ATIVO**
 
@@ -209,6 +210,12 @@ curl "https://yieldswap-stellar-mb55syqz9-jistrianes-projects.vercel.app/v1/swap
 ```
 
 ## 🔐 **Segurança**
+
+### **Proteção Criptográfica**
+- ✅ **[Assinatura Digital](SIGNATURE.md)** - RSA-4096 + SHA-512
+- ✅ **Certificado X.509** - Validade de 10 anos
+- ✅ **Manifest Assinado** - Integridade verificável
+- ✅ **Chave Pública** - Verificação transparente
 
 ### **Práticas Implementadas**
 - ✅ **Validação de Input** - Sanitização completa
