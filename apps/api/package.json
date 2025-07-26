@@ -34,7 +34,7 @@
     "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^7.1.17",
     "@nestjs/throttler": "^5.2.0",
-    "@nestjs/websockets": "^10.0.0",
+    "@nestjs/websockets": "^11.1.5",
     "@sentry/node": "^9.40.0",
     "@sentry/profiling-node": "^9.40.0",
     "@stellar/stellar-sdk": "^11.1.0",
